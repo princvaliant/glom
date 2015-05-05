@@ -1,0 +1,14 @@
+<template name="tdiTests">
+    <div class="form-group">
+        <h4>Test types</h4>
+        <div class="list-group border-bottom">
+         {{#each tests}}
+            {{> tdiTest}}
+          {{/each}}
+        </div>
+    </div>
+</template>
+
+<template name="tdiTest">
+      <a href="#" class="list-group-item test-item"><span class="fa fa-circle text-warning"></span> {{tkey}}</a>
+</template>

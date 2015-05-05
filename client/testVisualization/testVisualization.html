@@ -1,0 +1,49 @@
+<template name="testVisualization">
+
+
+    <!-- START CONTENT FRAME -->
+    <div class="content-frame">
+        <!-- START CONTENT FRAME TOP -->
+        <div class="content-frame-top">
+            <div class="page-title">
+                <h2><span class="fa fa-arrow-circle-o-left"></span> Wafer test visualization</h2>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-default content-frame-left-toggle"><span class="fa fa-bars"></span>
+                </button>
+            </div>
+        </div>
+        <div class="content-frame-left">
+            {{> tdiSearchBox}}
+            {{> selectedInfo}}
+            {{> tdiTests}}
+            {{> tdiCurrents}}
+            {{> tdiCodes}}
+            {{> tdiItems}}
+        </div>
+        <!-- END CONTENT FRAME TOP -->
+        <!-- START CONTENT FRAME BODY -->
+        <div class="content-frame-body content-frame-body-right">
+            <div class="gallery" id="links">
+                 {{#each testImages}}
+                    {{>tdiGalleryItem}}
+                {{/each}}
+            </div>
+        </div>
+        <!-- END CONTENT FRAME BODY -->
+    </div>
+    <!-- END CONTENT FRAME -->
+
+        <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+            <div class="slides"></div>
+            <h3 class="title"></h3>
+            <a class="prev">‹</a>
+            <a class="next">›</a>
+            <a class="close">×</a>
+            <a class="play-pause"></a>
+            <ol class="indicator"></ol>
+        </div>
+
+
+</template>
+

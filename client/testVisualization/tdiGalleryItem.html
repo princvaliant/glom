@@ -1,0 +1,12 @@
+<template name="tdiGalleryItem">
+      <a class="gallery-item" href="uploads/{{_id}}.jpg" title="{{code}} - {{item}}" data-gallery>
+          <div class="image">
+              <img src='uploads/{{_id}}.jpg' alt="{{code}}"/>
+          </div>
+          <div class="meta">
+              <strong>{{code}}<span style="float:right"><strong>{{item}}</strong></span></strong>
+              <span>{{tkey}} at {{current}}</span>
+          </div>
+      </a>
+</template>
+

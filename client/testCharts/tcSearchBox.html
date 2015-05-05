@@ -1,0 +1,14 @@
+<template name="tcSearchBox">
+    <div class="form-group push-up-10">
+        <h4>Search Wafer, Exps</h4>
+        <div class="input-group">
+            <div class="input-group-addon"><span class="fa fa-search"></span>
+            </div>
+            {{> inputAutocomplete settings=settings class="form-control" placeholder="type to search ..."}}
+        </div>
+    </div>
+</template>
+
+<template name="tcSearchItem">
+    <h6>{{code}} <span style="float:right;">{{experimentId}}</span></h6>
+</template>

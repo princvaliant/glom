@@ -1,0 +1,14 @@
+<template name="tdiCodes">
+    <div class="form-group">
+        <h4>Selected Wafers</h4>
+        <div class="list-group border-bottom">
+         {{#each codes}}
+              {{> tdiCode}}
+          {{/each}}
+        </div>
+    </div>
+</template>
+
+<template name="tdiCode">
+      <a href="#" class="list-group-item code-item"><span class="fa fa-circle text-danger"></span> {{code}}</a>
+</template>

@@ -1,0 +1,39 @@
+# Meteor packages used by this project, one per line.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+meteor
+autoupdate
+fastclick
+http
+launch-screen
+livedata
+mobile-status-bar
+reload
+session
+url
+webapp
+logging
+tracker
+ddp
+mongo
+blaze
+spacebars
+templating
+check
+underscore
+random
+ejson
+reactive-var
+reactive-dict
+
+iron:router
+atlantatheme
+aldeed:autoform
+aldeed:collection2
+aldeed:tabular
+doctorpangloss:mongodb-server-aggregation
+mizzao:autocomplete
+rcy:chromajs
+u2622:persistent-session

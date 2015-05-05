@@ -1,0 +1,14 @@
+<template name="tdiItems">
+    <div class="form-group">
+        <h4>Selected Measure</h4>
+        <div class="list-group border-bottom">
+         {{#each items}}
+              {{> tdiItem}}
+          {{/each}}
+        </div>
+    </div>
+</template>
+
+<template name="tdiItem">
+      <a href="#" class="list-group-item item-item"><span class="fa fa-circle text-info"></span> {{item}}</a>
+</template>

@@ -1,0 +1,14 @@
+<template name="tdiCurrents">
+    <div class="form-group">
+        <h4>Selected currents</h4>
+        <div class="list-group border-bottom">
+         {{#each currents}}
+              {{> tdiCurrent}}
+          {{/each}}
+        </div>
+    </div>
+</template>
+
+<template name="tdiCurrent">
+      <a href="#" class="list-group-item current-item"><span class="fa fa-circle text-success"></span> {{current}}</a>
+</template>
