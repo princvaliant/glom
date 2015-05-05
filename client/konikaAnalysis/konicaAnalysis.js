@@ -84,7 +84,7 @@ Template.konicaAnalysis.helpers({
 
         var tr = to || max;
         var fr = from || min;
-        var scale = chroma.scale(['blue', 'green', 'red']).domain([fr, tr]);
+        var scale = chroma.scale(['red', 'green', 'blue']).domain([fr, tr]);
 
         for (var ny1 = 0; ny1 < 0 + h; ny1++) {
           for (var nx1 = 0; nx1 < 0 + w; nx1++) {
@@ -120,9 +120,9 @@ Template.konicaAnalysis.helpers({
     return s ? s.testId : 'NONE';
   },
   scales: function () {
-    var scale = chroma.scale(['blue', 'green', 'red']).domain([0, 340]);
+    var scale = chroma.scale(['red', 'green', 'blue']).domain([0, 340]);
     var ret = new Array();
-    for (var i = 0; i < 410; i += 5) {
+    for (var i = 0; i < 340; i += 5) {
       ret.push({
         s: i,
         s1: i + 5,
