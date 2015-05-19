@@ -1,18 +1,20 @@
 UI.registerHelper('formatNum', function (context, options) {
-  if (context) {
-    if (context > 100)
-      return context.toFixed(1);
-
-    if (context < 1)
-      return context.toFixed(3);
-    return context.toFixed(2);
-  }
-  return context;
+  return formatNum(context);
 });
+
+Template.konicaAnalysis.created = function () {
+  this.screenSize = "55";
+  this.selectedPackage = new ReactiveVar({});
+  this.selectedTestType = new ReactiveVar({});
+  this.selectedTestType2 = new ReactiveVar({});
+  this.excludedSpots = new ReactiveArray();
+  this.customValues = new ReactiveVar({});
+};
 
 Template.konicaAnalysis.rendered = function () {
 
-  Measure(this);
+  var self = this;
+  Measure(self);
 
   $("#slider").ionRangeSlider({
     type: "double",
@@ -35,16 +37,41 @@ Template.konicaAnalysis.rendered = function () {
     });
   });
 
-  // When package selected or measure changed
+  // When package selected  changed
   this.autorun(function () {
-    var konica2 = Session.get("selectedPackage");
-    if (konica2) {
+    var selpkg = self.selectedPackage.get();
+    if (selpkg) {
       var measure = Session.get("measure");
-      Meteor.subscribe("konicaRaw", {
-        code: konica2.code,
-        testId: konica2.testId
+      if (self.subRaw) {
+        self.subRaw.stop();
+      }
+      self.subRaw = Meteor.subscribe("konicaRaw", {
+        code: selpkg.code,
+        testId: selpkg.testId
       }, measure);
     }
+  });
+
+  // If test type changed or package selected changed
+  this.autorun(function () {
+
+    var selpkg = self.selectedPackage.get();
+    var testType = self.selectedTestType.get();
+    if (!testType)
+      self.excludedSpots.clear();
+    if (selpkg && testType) {
+      self.customValues.set({});
+      if (self.sub)
+        self.sub.stop();
+      self.sub = Meteor.subscribe("konicaData",
+        selpkg.code,
+        selpkg.testId,
+        testType + ' spots',
+        function () {
+          self.selectedTestType2.set(testType);
+        });
+    }
+
   });
 };
 
@@ -53,7 +80,26 @@ Template.konicaAnalysis.helpers({
     return Konica.find();
   },
   konicaInfo: function () {
-    return Session.get("selectedPackage");
+    return Template.instance().selectedPackage.get();
+  },
+  dim: function () {
+    return imgDim();
+  },
+  carb_custom: function () {
+    return Template.instance().customValues.get().carb;
+  },
+  cadj_custom: function () {
+    return Template.instance().customValues.get().cadj;
+  },
+  spots: function () {
+    Template.instance().customValues.set(
+      ColorUniformity(Template.instance().selectedTestType2.get(), Template.instance().excludedSpots));
+
+    return calculateSpots(
+      Template.instance().screenSize,
+      Template.instance().selectedTestType2.get(),
+      Session.get('measure2'),
+      Template.instance().excludedSpots);
   },
   image: function () {
 
@@ -101,7 +147,6 @@ Template.konicaAnalysis.helpers({
           to: tr,
           step: 0.001
         });
-
         if (window.btoa !== undefined) {
           return 'data:image/bmp;base64,' + btoa(bmp.header + bmp.data.join(""));
         } else {
@@ -112,17 +157,17 @@ Template.konicaAnalysis.helpers({
     }
   },
   sCode: function () {
-    var s = Session.get("selectedPackage");
+    var s = Template.instance().selectedPackage.get();
     return s ? s.code : 'NONE';
   },
   sTestId: function () {
-    var s = Session.get("selectedPackage");
+    var s = Template.instance().selectedPackage.get();
     return s ? s.testId : 'NONE';
   },
   scales: function () {
-    var scale = chroma.scale(['red', 'green', 'blue']).domain([0, 340]);
-    var ret = new Array();
-    for (var i = 0; i < 340; i += 5) {
+    var scale = chroma.scale(['red', 'green', 'blue']).domain([0, 420]);
+    var ret = Array();
+    for (var i = 0; i < 420; i += 5) {
       ret.push({
         s: i,
         s1: i + 5,
@@ -137,11 +182,25 @@ Template.konicaAnalysis.events({
   'keyup .searchPackage': function (evt, template) {
     throttledSearchPackage(template);
   },
-  'click .package': function (evt) {
-    Session.set("selectedPackage", this);
+  'click .package': function (evt, template) {
+    template.selectedPackage.set(this);
   },
   'change .measure': function (evt, template) {
     Measure(template);
+  },
+  'click input[type=radio]': function (evt, template) {
+    template.selectedTestType.set(evt.target.value);
+  },
+  'click .spot': function (evt, template) {
+    var n = evt.target.attributes.value.value;
+    var i = template.excludedSpots.indexOf(n);
+    console.log(n);
+    console.log(i);
+    if (i === -1) {
+      template.excludedSpots.push(n);
+    } else {
+      template.excludedSpots.splice(i, 1);
+    }
   }
 });
 
@@ -175,6 +234,7 @@ function Measure(template) {
   if (sel == 'y') m = '5';
   if (sel == 'tcp') m = '8';
   Session.set('measure', m);
+  Session.set('measure2', sel);
 }
 
 function calcColor(val, scale, fr, tr) {
@@ -182,4 +242,116 @@ function calcColor(val, scale, fr, tr) {
     return String.fromCharCode(0, 0, 0, 1);
   var r = scale(val);
   return String.fromCharCode(r._rgb[2], r._rgb[1], r._rgb[0], 0);
+}
+
+function imgDim() {
+  var row = KonicaRaw.findOne();
+  if (row) {
+    var f = row['3'] || row['4'] || row['5'] || row['8'];
+    if (f) {
+      var w = f.length;
+      var h = f[0].length;
+      return {
+        w: w,
+        h: h
+      };
+    }
+  }
+  return undefined;
+}
+
+function calculateSpots(screenSize, testType, meas, excludedSpots) {
+
+  var data = Array();
+  var spots = Spots[screenSize][testType];
+  var dim = imgDim();
+  var fontSize = 8;
+
+  if (testType === undefined || testType === '' || spots === undefined || dim === undefined)
+    return data;
+
+  var rows = KonicaData.find({
+    testType: testType + ' spots'
+  }).fetch();
+
+  if (spots.manual) {
+
+    for (var i in spots.manual) {
+      var v = spots.manual[i];
+      var rec = _.findWhere(rows, {
+        spot: parseInt(i)
+      });
+      if (rec) {
+        var obj = {
+          x: v.l + 8,
+          xt: v.l + 17 - spots.height / 2,
+          y: v.t + 8,
+          yt: v.t + 12,
+          r: spots.height / 2,
+          d: spots.height + 1,
+          opacity: excludedSpots.indexOf(i.toString()) >= 0 ? 1 : 0,
+          v: formatNum(rec[meas]),
+          fs: fontSize,
+          idx: i
+        };
+        data.push(obj);
+      }
+    }
+  } else if (spots.offset) {
+
+    var effWidth = dim.w - 16 - spots.offset.left - spots.offset.right;
+    var effHeight = dim.h - 16 - spots.offset.top - spots.offset.bottom;
+    var distx = effWidth / (spots.col - 1 || 1);
+    var disty = effHeight / (spots.row - 1 || 1);
+
+    var xt = spots.offset.left - 2;
+    var yt = spots.offset.top + 20;
+    if (testType === '50') {
+      xt = spots.offset.left + 10 + spots.height / 2;
+      yt = spots.offset.top + 10;
+    }
+    if (testType === '69') {
+      fontSize = 4;
+      xt = spots.offset.left + spots.height / 2;
+      yt = spots.offset.top + 14;
+    }
+
+    var n = 1;
+    for (var r = spots.row - 1; r >= 0; r--) {
+      for (var c = spots.col - 1; c >= 0; c--) {
+        var rec2 = _.findWhere(rows, {
+          spot: n
+        });
+        if (rec2) {
+          var obj2 = {
+            x: spots.offset.left + 8 + c * distx,
+            xt: xt + c * distx,
+            y: spots.offset.top + 8 + r * disty,
+            yt: yt + r * disty,
+            r: spots.height / 2,
+            d: spots.height + 1,
+            opacity: excludedSpots.indexOf(n.toString()) >= 0 ? 1 : 0,
+            v: formatNum(rec2[meas]),
+            fs: fontSize,
+            idx: n
+          };
+          data.push(obj2);
+        }
+        n++;
+      }
+    }
+  }
+  return data;
+}
+
+function formatNum(context) {
+  if (context) {
+    if (context > 100)
+      return context.toFixed(0);
+
+    if (context < 1)
+      return context.toFixed(3);
+    return context.toFixed(2);
+  }
+  return context;
 }

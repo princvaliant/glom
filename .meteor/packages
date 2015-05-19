@@ -28,6 +28,7 @@ ejson
 reactive-var
 reactive-dict
 
+d3js:d3
 iron:router
 atlantatheme
 aldeed:autoform
@@ -37,3 +38,4 @@ doctorpangloss:mongodb-server-aggregation
 mizzao:autocomplete
 rcy:chromajs
 u2622:persistent-session
+manuel:reactivearray

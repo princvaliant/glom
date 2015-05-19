@@ -1,10 +1,9 @@
 <template name="layout">
-     <!-- START PAGE CONTAINER -->
-    <div class="page-container page-navigation-top">
+    <!-- START PAGE CONTAINER -->
+    <div class="page-container page-navigation-top" style="height:100%">
         <!-- PAGE CONTENT -->
-        <div class="page-content">
-            {{>navigation}}
-            {{>yield}}
+        <div class="page-content" style="height:100%">
+            {{>navigation}} {{>yield}}
         </div>
         <!-- END PAGE CONTENT -->
     </div>

@@ -36,3 +36,16 @@ Meteor.publish("konicaRaw", function(query, m) {
         fields: fields
     });
 });
+
+Meteor.publish("konicaData", function(code, testId, testType) {
+
+    return KonicaData.find({
+        code: code,
+        testId: testId,
+        testType: testType
+    }, {
+        sort: {
+            'spot': 1
+        }
+    });
+});

@@ -1,27 +1,18 @@
 <template name="konicaAnalysis">
     <!-- START CONTENT FRAME -->
-    <div class="content-frame">
+    <div class="content-frame" style="height:100%">
         <!-- START CONTENT FRAME TOP -->
-        <div class="content-frame-top">
-            <div class="page-title">
-                <h2><span class="fa fa-arrow-circle-o-left"></span> Konica Data analysis</h2>
-            </div>
-            <div class="pull-right">
-                <button class="btn btn-default content-frame-left-toggle"><span class="fa fa-bars"></span>
-                </button>
-            </div>
-        </div>
-        <div class="content-frame-left">
+        <div class="content-frame-left" style="height:100%">
             <div class="form-group push-up-10">
-                <h4>Search Package number</h4>
+                <h4>Konica Data analysis</h4>
                 <div class="input-group">
                     <div class="input-group-addon"><span class="fa fa-search"></span>
                     </div>
                     <input type="text" class="form-control searchPackage" placeholder="start typing ..." />
                 </div>
             </div>
-            <div class="panel-body">
-                <div class="list-group border-bottom">
+            <div class="panel-body" style="height:100%;padding-top:1px;">
+                <div class="list-group border-bottom" style="height:100%;overflow-y:scroll;">
                     {{#each konica}}
                     <a href="#" class="list-group-item  package">{{code}}<span class="badge">{{testId}}</span></a> {{/each}}
                 </div>
@@ -29,140 +20,188 @@
         </div>
         <!-- END CONTENT FRAME TOP -->
         <!-- START CONTENT FRAME BODY -->
-        <div class="content-frame-body content-frame-body-right">
-            <div class="col-md-6">
-                <div class="form-group" style="width:370px;">
-                    <select class="form-control select measure" style="width:420px;">
-                        <option>Nits</option>
-                        <option>x</option>
-                        <option>y</option>
-                        <option>tcp</option>
-                    </select>
-                </div>
-                <div class="form-group" style="width:410px;">
-                    <div class="defaultSlider" id="slider"></div>
-                </div>
-                <div class="form-group" style="width:440px;">
-                    <svg height="15" width="440">
-                        {{#each scales}}
-                        <path d="M{{s}} 0 L{{s1}} 0 L{{s1}} 15 L {{s}} 15  L {{s}} 0 Z" stroke="{{col}}" fill="{{col}}" /> {{/each}}
-                    </svg>
-                </div>
-                <div class="form-group" style="width:420px;">
-                    {{#with konicaInfo}}
-                    <div class="panel panel-default">
-                        <div class="panel-body panel-body-table">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped">
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>Serial#</strong></td>
-                                            <td>{{sCode}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Test#</strong></td>
-                                            <td>{{sTestId}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Comment</strong></td>
-                                            <td>{{comment}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Tested by</strong></td>
-                                            <td>{{testedBy}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Red current (mA)</strong></td>
-                                            <td>{{red_current}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Green current (mA)</strong></td>
-                                            <td>{{green_current}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Blue current (mA)</strong></td>
-                                            <td>{{blue_current}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+        <div class="content-frame-body content-frame-body-right" style="padding-top:12px;">
+            <table class="table">
+                <tr>
+                    <td style="width:440px;">
+                        <div class="form-group">
+                            <select class="form-control select measure" style="width:420px;">
+                                <option>Lv</option>
+                                <option>x</option>
+                                <option>y</option>
+                                <option>tcp</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="width:410px;">
+                            <div class="defaultSlider" id="slider"></div>
+                        </div>
+                        <div class="form-group" style="width:440px;">
+                            <svg height="15" width="440">
+                                {{#each scales}}
+                                <path d="M{{s}} 0 L{{s1}} 0 L{{s1}} 15 L {{s}} 15  L {{s}} 0 Z" stroke="{{col}}" fill="{{col}}" /> {{/each}}
+                            </svg>
+                        </div>
+                        <div class="form-group" style="width:420px;">
+                            {{#with konicaInfo}}
+                            <div class="panel panel-default">
+                                <div class="panel-body panel-body-table">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:140px"><strong>Serial#</strong></td>
+                                                    <td>{{sCode}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Test#</strong></td>
+                                                    <td>{{sTestId}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Comment</strong></td>
+                                                    <td>{{comment}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Tested by</strong></td>
+                                                    <td>{{testedBy}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Red current (mA)</strong></td>
+                                                    <td>{{red_current}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Green current (mA)</strong></td>
+                                                    <td>{{green_current}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Blue current (mA)</strong></td>
+                                                    <td>{{blue_current}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-body panel-body-table">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr align='center'>
+                                                    <td>
+                                                        no spots
+                                                        <input type="radio" name="meas" value="" checked=true>
+                                                    </td>
+                                                    <td>
+                                                        <input type="radio" name="meas" value="13">
+                                                    </td>
+                                                    <td>
+                                                        <input type="radio" name="meas" value="50">
+                                                    </td>
+                                                    <td>
+                                                        <input type="radio" name="meas" value="69">
+                                                    </td>
+                                                    <td>
+                                                        <input type="radio" name="meas" value="135">
+                                                    </td>
+                                                    <td>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th width="27%">Attribute</th>
+                                                    <th width="15%">13 pt</th>
+                                                    <th width="15%">50 pt</th>
+                                                    <th width="15%">69 pt</th>
+                                                    <th width="15%">135 pt</th>
+                                                    <th width="13%">Custom</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                               <tr>
+                                                    <td><strong>Color shift 2pt</strong></td>
+                                                    <td>{{formatNum color_shift_arbitrary_13pt}}</td>
+                                                    <td>{{formatNum color_shift_arbitrary_50pt}}</td>
+                                                    <td>{{formatNum color_shift_arbitrary_69pt}}</td>
+                                                    <td>{{formatNum color_shift_arbitrary_135pt}}</td>
+                                                    <td><i>{{formatNum carb_custom}}</i></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Color shift adj</strong></td>
+                                                    <td>{{formatNum color_shift_adjacent_13pt}}</td>
+                                                    <td>{{formatNum color_shift_adjacent_50pt}}</td>
+                                                    <td>{{formatNum color_shift_adjacent_69pt}}</td>
+                                                    <td>{{formatNum color_shift_adjacent_135pt}}</td>
+                                                    <td><i>{{formatNum cadj_custom}}</i></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Nits avg</strong></td>
+                                                    <td>{{formatNum avg_13pt}}</td>
+                                                    <td>{{formatNum avg_50pt}}</td>
+                                                    <td>{{formatNum avg_69pt}}</td>
+                                                    <td>{{formatNum avg_135pt}}</td>
+                                                    <td>{{formatNum avg_custom}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Nits unif</strong></td>
+                                                    <td>{{formatNum unif_13pt}}</td>
+                                                    <td>{{formatNum unif_50pt}}</td>
+                                                    <td>{{formatNum unif_69pt}}</td>
+                                                    <td>{{formatNum unif_135pt}}</td>
+                                                    <td>{{formatNum unif_custom}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>tcp unif</strong></td>
+                                                    <td>{{formatNum tcp_13pt}}</td>
+                                                    <td>{{formatNum tcp_50pt}}</td>
+                                                    <td>{{formatNum tcp_69pt}}</td>
+                                                    <td>{{formatNum tcp_135pt}}</td>
+                                                    <td>{{formatNum tcp_custom}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>CIEx</strong></td>
+                                                    <td>{{formatNum ciex_13pt}}</td>
+                                                    <td>{{formatNum ciex_50pt}}</td>
+                                                    <td>{{formatNum ciex_69pt}}</td>
+                                                    <td>{{formatNum ciex_135pt}}</td>
+                                                    <td>{{formatNum cx_custom}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>CIEy</strong></td>
+                                                    <td>{{formatNum ciey_13pt}}</td>
+                                                    <td>{{formatNum ciey_50pt}}</td>
+                                                    <td>{{formatNum ciey_69pt}}</td>
+                                                    <td>{{formatNum ciey_135pt}}</td>
+                                                    <td>{{formatNum cy_custom}}</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END PROJECTS BLOCK -->
+                            {{/with}}
+                        </div>
+                    </td>
+                    <td style="width:330px;vertical-align:top;text-align:left;padding:5px;">
+                        {{#with dim}}
+                        <p style="white-space: nowrap;">Width {{w}} px, Height {{h}} px</p>
+                        <div style="position:relative;top:0,left:0;">
+                            <img src="{{image}}" class="image" style="position:absolute;x:0,y:0;z-index:0;opacity:0.99;" />
+                            <div style="position:absolute;top:0;left:0;width:{{w}}px;height:{{h}}px;opacity:1;">
+                                <svg width="{{w}}" height="{{h}}">
+                                    {{#each spots}}
+                                    <circle cx="{{x}}" cy="{{y}}" r="{{r}}" class="spot" value="{{idx}}" style="stroke-width:1px;stroke:#FFFFFF; fill:#FFFF00;fill-opacity:{{opacity}};" />
+                                    <text x="{{xt}}" y="{{yt}}" fill="#FFFFFF" class="spot" value="{{idx}}" style="font-size:{{fs}}px;">{{v}}</text>
+                                    {{/each}}
+                                </svg>
                             </div>
                         </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-body panel-body-table">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th width="25%">Attribute</th>
-                                            <th width="15%">13 pt</th>
-                                            <th width="15%">50 pt</th>
-                                            <th width="15%">69 pt</th>
-                                            <th width="15%">126 pt</th>
-                                            <th width="15%">135 pt</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>Nits avg</strong></td>
-                                            <td>{{formatNum avg_13pt}}</td>
-                                            <td>{{formatNum avg_50pt}}</td>
-                                            <td>{{formatNum avg_69pt}}</td>
-                                            <td>{{formatNum avg_126pt}}</td>
-                                            <td>{{formatNum avg_135pt}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Nits unif</strong></td>
-                                            <td>{{formatNum unif_13pt}}</td>
-                                            <td>{{formatNum unif_50pt}}</td>
-                                            <td>{{formatNum unif_69pt}}</td>
-                                            <td>{{formatNum unif_126pt}}</td>
-                                            <td>{{formatNum unif_135pt}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>CIEx</strong></td>
-                                            <td>{{formatNum ciex_13pt}}</td>
-                                            <td>{{formatNum ciex_50pt}}</td>
-                                            <td>{{formatNum ciex_69pt}}</td>
-                                            <td>{{formatNum ciex_126pt}}</td>
-                                            <td>{{formatNum ciex_135pt}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>CIEy</strong></td>
-                                            <td>{{formatNum ciey_13pt}}</td>
-                                            <td>{{formatNum ciey_50pt}}</td>
-                                            <td>{{formatNum ciey_69pt}}</td>
-                                            <td>{{formatNum ciey_126pt}}</td>
-                                            <td>{{formatNum ciey_135pt}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Color shift 2pt</strong></td>
-                                            <td>{{formatNum color_shift_arbitrary_13pt}}</td>
-                                            <td>{{formatNum color_shift_arbitrary_50pt}}</td>
-                                            <td>{{formatNum color_shift_arbitrary_69pt}}</td>
-                                            <td>{{formatNum color_shift_arbitrary_126pt}}</td>
-                                            <td>{{formatNum color_shift_arbitrary_135pt}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Color shift adj</strong></td>
-                                            <td>{{formatNum color_shift_adjacent_13pt}}</td>
-                                            <td>{{formatNum color_shift_adjacent_50pt}}</td>
-                                            <td>{{formatNum color_shift_adjacent_69pt}}</td>
-                                            <td>{{formatNum color_shift_adjacent_126pt}}</td>
-                                            <td>{{formatNum color_shift_adjacent_135pt}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END PROJECTS BLOCK -->
-                    {{/with}}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <img src="{{image}}" />
-            </div>
+                        {{/with}}
+                    </td>
+                    <td style="width:100%;">
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
     <!-- END CONTENT FRAME BODY -->
