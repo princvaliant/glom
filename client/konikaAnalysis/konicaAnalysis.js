@@ -92,6 +92,7 @@ Template.konicaAnalysis.helpers({
     return Template.instance().customValues.get().cadj;
   },
   spots: function () {
+
     Template.instance().customValues.set(
       ColorUniformity(Template.instance().selectedTestType2.get(), Template.instance().excludedSpots));
 

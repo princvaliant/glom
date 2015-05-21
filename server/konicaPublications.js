@@ -12,7 +12,7 @@ Meteor.publish("konica", function(query) {
     return Konica.find(q, {
         limit: limit,
         sort: {
-            'testId': -1
+            'date': -1
         }
     });
 });

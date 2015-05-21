@@ -14,7 +14,11 @@
             <div class="panel-body" style="height:100%;padding-top:1px;">
                 <div class="list-group border-bottom" style="height:100%;overflow-y:scroll;">
                     {{#each konica}}
-                    <a href="#" class="list-group-item  package">{{code}}<span class="badge">{{testId}}</span></a> {{/each}}
+                    <a href="#" class="list-group-item  package">{{code}}<span class="badge" style="color:{{#if top200}}
+       red
+    {{else}}
+       white
+    {{/if}}">{{testId}}</span></a> {{/each}}
                 </div>
             </div>
         </div>
