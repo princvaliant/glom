@@ -9,6 +9,7 @@ Template.konicaAnalysis.created = function () {
   this.selectedTestType2 = new ReactiveVar({});
   this.excludedSpots = new ReactiveArray();
   this.customValues = new ReactiveVar({});
+  this.isTop200 = new ReactiveVar();
 };
 
 Template.konicaAnalysis.rendered = function () {
@@ -32,15 +33,17 @@ Template.konicaAnalysis.rendered = function () {
   // Subscribe to search packages
   this.autorun(function () {
     var search = Session.get("searchPackage");
-    Meteor.subscribe("konica", {
-      search: search
-    });
+    if (self.subKon) {
+      self.subKon.stop();
+    }
+    self.subKon = Meteor.subscribe("konica", search);
   });
 
   // When package selected  changed
   this.autorun(function () {
     var selpkg = self.selectedPackage.get();
     if (selpkg) {
+      self.isTop200.set(selpkg.top200);
       var measure = Session.get("measure");
       if (self.subRaw) {
         self.subRaw.stop();
@@ -109,12 +112,11 @@ Template.konicaAnalysis.helpers({
     var from = Session.get('from' + Session.get("measure"));
     var to = Session.get('to' + Session.get("measure"));
     var meas = Session.get("measure");
+    var isTop200 = Template.instance().isTop200.get();
 
-    if (row) {
+    if (isTop200 === undefined && row !== undefined) {
       var f = row[meas];
       if (f) {
-        //     console.log(row['from' + meas] + ' ' + row['to' + meas] + ' ' + row._id);
-
         var w = f.length;
         var h = f[0].length;
         var min = 100000000;
@@ -155,6 +157,18 @@ Template.konicaAnalysis.helpers({
         }
       }
       return null;
+    } else if (isTop200) {
+      var hh = 554,
+        ww = 317;
+      var scale2 = chroma.scale(['red', 'green', 'blue']).domain([1, 20]);
+      var bmp2 = new image(ww, hh);
+      setImageHeader(bmp2);
+      for (var y1 = 0; y1 < hh; y1++) {
+        for (var x1 = 0; x1 < ww; x1++) {
+          bmp2.data[y1 * ww + x1] = calcColor(10, scale2, 1, 20);
+        }
+      }
+      return 'data:image/bmp;base64,' + btoa(bmp2.header + bmp2.data.join(""));
     }
   },
   sCode: function () {
@@ -195,8 +209,6 @@ Template.konicaAnalysis.events({
   'click .spot': function (evt, template) {
     var n = evt.target.attributes.value.value;
     var i = template.excludedSpots.indexOf(n);
-    console.log(n);
-    console.log(i);
     if (i === -1) {
       template.excludedSpots.push(n);
     } else {
@@ -209,7 +221,8 @@ var throttledSearchPackage = _.debounce(searchPackage, 250);
 var throttledSlider = _.debounce(Slider, 850);
 
 function searchPackage(template) {
-  Session.set('searchPackage', template.find('.searchPackage').value);
+  var srch = template.find('.searchPackage').value;
+  Session.set('searchPackage', srch);
 }
 
 function Slider(data) {
@@ -247,7 +260,8 @@ function calcColor(val, scale, fr, tr) {
 
 function imgDim() {
   var row = KonicaRaw.findOne();
-  if (row) {
+  var isTop200 = Template.instance().isTop200.get();
+  if (isTop200 === undefined && row !== undefined) {
     var f = row['3'] || row['4'] || row['5'] || row['8'];
     if (f) {
       var w = f.length;
@@ -257,6 +271,11 @@ function imgDim() {
         h: h
       };
     }
+  } else {
+    return {
+      w: 317,
+      h: 554
+    };
   }
   return undefined;
 }

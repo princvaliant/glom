@@ -1,12 +1,16 @@
-Meteor.publish("konica", function(query) {
+Meteor.publish("konica", function(search) {
 
     var limit = 100;
     var q = {};
-    if (query && query.search) {
+    if (search) {
         q.code = {
-            $regex: '^' + query.search
+            $regex: '^' + search
         };
         limit = 100;
+    } else {
+        q.code = {
+            $ne: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
+        };
     }
 
     return Konica.find(q, {
