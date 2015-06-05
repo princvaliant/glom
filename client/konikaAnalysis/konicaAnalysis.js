@@ -182,7 +182,7 @@ Template.konicaAnalysis.helpers({
   scales: function () {
     var scale = chroma.scale(['red', 'green', 'blue']).domain([0, 420]);
     var ret = Array();
-    for (var i = 0; i < 420; i += 5) {
+    for (var i = 0; i < 460; i += 5) {
       ret.push({
         s: i,
         s1: i + 5,
@@ -195,6 +195,9 @@ Template.konicaAnalysis.helpers({
 
 Template.konicaAnalysis.events({
   'keyup .searchPackage': function (evt, template) {
+    throttledSearchPackage(template);
+  },
+  'change .testSource': function (evt, template) {
     throttledSearchPackage(template);
   },
   'click .package': function (evt, template) {
@@ -221,8 +224,10 @@ var throttledSearchPackage = _.debounce(searchPackage, 250);
 var throttledSlider = _.debounce(Slider, 850);
 
 function searchPackage(template) {
-  var srch = template.find('.searchPackage').value;
-  Session.set('searchPackage', srch);
+  var obj = {};
+  obj.text = template.find('.searchPackage').value;
+  obj.testSource = template.find('.testSource').value;
+  Session.set('searchPackage', obj);
 }
 
 function Slider(data) {
@@ -338,7 +343,7 @@ function calculateSpots(screenSize, testType, meas, excludedSpots) {
 
     var n = 1;
     for (var r = spots.row - 1; r >= 0; r--) {
-      for (var c = spots.col - 1; c >= 0; c--) {
+      for (var c = 0; c <= spots.col - 1; c++) {
         var rec2 = _.findWhere(rows, {
           spot: n
         });
@@ -356,6 +361,8 @@ function calculateSpots(screenSize, testType, meas, excludedSpots) {
             idx: n
           };
           data.push(obj2);
+
+          console.log(n + ' ' + obj2.x + ' ' + obj2.y);
         }
         n++;
       }

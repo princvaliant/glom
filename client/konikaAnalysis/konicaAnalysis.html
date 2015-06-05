@@ -9,6 +9,11 @@
                     <div class="input-group-addon"><span class="fa fa-search"></span>
                     </div>
                     <input type="text" class="form-control searchPackage" placeholder="start typing ..." />
+                    <select class="form-control select testSource" placeholder="test source ...">
+                        <option>Camera and Top 200</option>
+                        <option>Camera only</option>
+                        <option>Top 200 only</option>
+                    </select>
                 </div>
             </div>
             <div class="panel-body" style="height:100%;padding-top:1px;">
@@ -27,25 +32,25 @@
         <div class="content-frame-body content-frame-body-right" style="padding-top:12px;">
             <table class="table">
                 <tr>
-                    <td style="width:440px;">
+                    <td style="width:480px;">
                         <div class="form-group">
-                            <select class="form-control select measure" style="width:420px;">
+                            <select class="form-control select measure" style="width:460px;">
                                 <option>Lv</option>
                                 <option>x</option>
                                 <option>y</option>
                                 <option>tcp</option>
                             </select>
                         </div>
-                        <div class="form-group" style="width:410px;">
+                        <div class="form-group" style="width:450px;">
                             <div class="defaultSlider" id="slider"></div>
                         </div>
-                        <div class="form-group" style="width:440px;">
-                            <svg height="15" width="440">
+                        <div class="form-group" style="width:480px;">
+                            <svg height="15" width="480">
                                 {{#each scales}}
                                 <path d="M{{s}} 0 L{{s1}} 0 L{{s1}} 15 L {{s}} 15  L {{s}} 0 Z" stroke="{{col}}" fill="{{col}}" /> {{/each}}
                             </svg>
                         </div>
-                        <div class="form-group" style="width:420px;">
+                        <div class="form-group" style="width:460px;">
                             {{#with konicaInfo}}
                             <div class="panel panel-default">
                                 <div class="panel-body panel-body-table">
@@ -109,6 +114,8 @@
                                                     </td>
                                                     <td>
                                                     </td>
+                                                    <td>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <th width="27%">Attribute</th>
@@ -116,17 +123,19 @@
                                                     <th width="15%">50 pt</th>
                                                     <th width="15%">69 pt</th>
                                                     <th width="15%">135 pt</th>
-                                                    <th width="13%">Custom</th>
+                                                    <th width="12%">126 pt</th>
+                                                    <th width="12%">84 pt</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                               <tr>
+                                                <tr>
                                                     <td><strong>Color shift 2pt</strong></td>
                                                     <td>{{formatNum color_shift_arbitrary_13pt}}</td>
                                                     <td>{{formatNum color_shift_arbitrary_50pt}}</td>
                                                     <td>{{formatNum color_shift_arbitrary_69pt}}</td>
                                                     <td>{{formatNum color_shift_arbitrary_135pt}}</td>
-                                                    <td><i>{{formatNum carb_custom}}</i></td>
+                                                    <td>{{formatNum color_shift_arbitrary_126pt}}</td>
+                                                    <td>{{formatNum color_shift_arbitrary_84pt}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><strong>Color shift adj</strong></td>
@@ -134,7 +143,8 @@
                                                     <td>{{formatNum color_shift_adjacent_50pt}}</td>
                                                     <td>{{formatNum color_shift_adjacent_69pt}}</td>
                                                     <td>{{formatNum color_shift_adjacent_135pt}}</td>
-                                                    <td><i>{{formatNum cadj_custom}}</i></td>
+                                                    <td>{{formatNum color_shift_adjacent_126pt}}</td>
+                                                    <td>{{formatNum color_shift_adjacent_84pt}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td><strong>Nits avg</strong></td>
@@ -142,7 +152,8 @@
                                                     <td>{{formatNum avg_50pt}}</td>
                                                     <td>{{formatNum avg_69pt}}</td>
                                                     <td>{{formatNum avg_135pt}}</td>
-                                                    <td>{{formatNum avg_custom}}</td>
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td><strong>Nits unif</strong></td>
@@ -150,7 +161,8 @@
                                                     <td>{{formatNum unif_50pt}}</td>
                                                     <td>{{formatNum unif_69pt}}</td>
                                                     <td>{{formatNum unif_135pt}}</td>
-                                                    <td>{{formatNum unif_custom}}</td>
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td><strong>tcp unif</strong></td>
@@ -158,7 +170,8 @@
                                                     <td>{{formatNum tcp_50pt}}</td>
                                                     <td>{{formatNum tcp_69pt}}</td>
                                                     <td>{{formatNum tcp_135pt}}</td>
-                                                    <td>{{formatNum tcp_custom}}</td>
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td><strong>CIEx</strong></td>
@@ -166,7 +179,8 @@
                                                     <td>{{formatNum ciex_50pt}}</td>
                                                     <td>{{formatNum ciex_69pt}}</td>
                                                     <td>{{formatNum ciex_135pt}}</td>
-                                                    <td>{{formatNum cx_custom}}</td>
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td><strong>CIEy</strong></td>
@@ -174,9 +188,9 @@
                                                     <td>{{formatNum ciey_50pt}}</td>
                                                     <td>{{formatNum ciey_69pt}}</td>
                                                     <td>{{formatNum ciey_135pt}}</td>
-                                                    <td>{{formatNum cy_custom}}</td>
+                                                    <td></td>
+                                                    <td></td>
                                                 </tr>
-
                                             </tbody>
                                         </table>
                                     </div>
@@ -189,6 +203,9 @@
                     <td style="width:330px;vertical-align:top;text-align:left;padding:5px;">
                         {{#with dim}}
                         <p style="white-space: nowrap;">Width {{w}} px, Height {{h}} px</p>
+                        <p style="white-space: nowrap;font-size:16px;">
+                            {{#with konicaInfo}} {{formatNum carb_custom}}, {{formatNum cadj_custom}} {{/with}}
+                        </p>
                         <div style="position:relative;top:0,left:0;">
                             <img src="{{image}}" class="image" style="position:absolute;x:0,y:0;z-index:0;opacity:0.99;" />
                             <div style="position:absolute;top:0;left:0;width:{{w}}px;height:{{h}}px;opacity:1;">

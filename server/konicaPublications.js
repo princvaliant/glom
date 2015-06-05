@@ -2,15 +2,24 @@ Meteor.publish("konica", function(search) {
 
     var limit = 100;
     var q = {};
-    if (search) {
+
+    if (search && search.text) {
         q.code = {
-            $regex: '^' + search
+            $regex: '^' + search.text
         };
         limit = 100;
     } else {
         q.code = {
             $ne: Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
         };
+    }
+    if (search) {
+        if (search.testSource === "Camera only") {
+            q.top200 = null;
+        }
+        if (search.testSource === "Top 200 only") {
+            q.top200 = true;
+        }
     }
 
     return Konica.find(q, {
