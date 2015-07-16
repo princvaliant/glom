@@ -217,6 +217,37 @@ Template.konicaAnalysis.events({
     } else {
       template.excludedSpots.splice(i, 1);
     }
+  },
+  'click .excel-export': function (evt, template) {
+    var row = KonicaRaw.findOne();
+    var meas = Session.get("measure");
+    if (row !== undefined) {
+      var f = row[meas];
+      if (f) {
+        var w = f.length;
+        var h = f[0].length;
+        var ret = '';
+        for (var ny1 = 5; ny1 < h - 10; ny1++) {
+          var r = '';
+          for (var nx1 = 5; nx1 <  w - 10; nx1++) {
+               r += f[nx1][ny1] + ',';
+          }
+          ret  += r + '\n';
+        }
+        // Create link.
+        a = document.createElement( "a" );
+        // Set link on DOM.
+        document.body.appendChild( a );
+        // Set link's visibility.
+        a.style = "display: none";
+        // Set href on link.
+        a.href = encodeURI('data:text/csv;' + ret);
+        // Set file name on link.
+        a.download = template.selectedPackage.get().code + '_' + template.find('.measure').value + '.csv';
+        // Trigger click of link.
+        a.click();
+      }
+    }
   }
 });
 

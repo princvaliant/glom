@@ -198,11 +198,14 @@
                             </div>
                             <!-- END PROJECTS BLOCK -->
                             {{/with}}
+
                         </div>
                     </td>
                     <td style="width:330px;vertical-align:top;text-align:left;padding:5px;">
                         {{#with dim}}
-                        <p style="white-space: nowrap;">Width {{w}} px, Height {{h}} px</p>
+                        <p style="white-space: nowrap;">Width {{w}} px, Height {{h}} px
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="excel-export"><span class="fa fa-circle text-danger"></span>&nbsp;Export raw data</a>
+                        </p>
                         <p style="white-space: nowrap;font-size:16px;">
                             {{#with konicaInfo}} {{formatNum carb_custom}}, {{formatNum cadj_custom}} {{/with}}
                         </p>
