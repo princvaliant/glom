@@ -32,6 +32,7 @@ Template.konicaAnalysis.rendered = function () {
 
   // Subscribe to search packages
   this.autorun(function () {
+
     var search = Session.get("searchPackage");
     if (self.subKon) {
       self.subKon.stop();
@@ -41,6 +42,9 @@ Template.konicaAnalysis.rendered = function () {
 
   // When package selected  changed
   this.autorun(function () {
+
+    document.getElementById('chartxy').innerHTML = '';
+
     var selpkg = self.selectedPackage.get();
     if (selpkg) {
       self.isTop200.set(selpkg.top200);
@@ -57,6 +61,8 @@ Template.konicaAnalysis.rendered = function () {
 
   // If test type changed or package selected changed
   this.autorun(function () {
+
+    document.getElementById('chartxy').innerHTML = '';
 
     var selpkg = self.selectedPackage.get();
     var testType = self.selectedTestType.get();
@@ -201,13 +207,29 @@ Template.konicaAnalysis.events({
     throttledSearchPackage(template);
   },
   'click .package': function (evt, template) {
+
+    evt.target.className += " active";
     template.selectedPackage.set(this);
+
   },
   'change .measure': function (evt, template) {
     Measure(template);
   },
   'click input[type=radio]': function (evt, template) {
     template.selectedTestType.set(evt.target.value);
+  },
+  'click .imagecont': function (evt, template) {
+    var selpkg = template.selectedPackage.get();
+    if (selpkg) {
+      var x = evt.originalEvent.layerX;
+      var y = evt.originalEvent.layerY;
+      Meteor.call('histogram', selpkg.code, selpkg.testId, Session.get("measure"), x, y, function (error, data) {
+        if (document.querySelector('#chartxy') !== null) {
+          var chart = new CanvasJS.Chart('chartxy', data);
+          chart.render();
+        }
+      });
+    }
   },
   'click .spot': function (evt, template) {
     var n = evt.target.attributes.value.value;
@@ -229,15 +251,15 @@ Template.konicaAnalysis.events({
         var ret = '';
         for (var ny1 = 5; ny1 < h - 10; ny1++) {
           var r = '';
-          for (var nx1 = 5; nx1 <  w - 10; nx1++) {
-               r += f[nx1][ny1] + ',';
+          for (var nx1 = 5; nx1 < w - 10; nx1++) {
+            r += f[nx1][ny1] + ',';
           }
-          ret  += r + '\n';
+          ret += r + '\n';
         }
         // Create link.
-        a = document.createElement( "a" );
+        a = document.createElement("a");
         // Set link on DOM.
-        document.body.appendChild( a );
+        document.body.appendChild(a);
         // Set link's visibility.
         a.style = "display: none";
         // Set href on link.
@@ -392,8 +414,6 @@ function calculateSpots(screenSize, testType, meas, excludedSpots) {
             idx: n
           };
           data.push(obj2);
-
-          console.log(n + ' ' + obj2.x + ' ' + obj2.y);
         }
         n++;
       }

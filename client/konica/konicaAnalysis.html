@@ -19,20 +19,20 @@
             <div class="panel-body" style="height:100%;padding-top:1px;">
                 <div class="list-group border-bottom" style="height:100%;overflow-y:scroll;">
                     {{#each konica}}
-                    <a href="#" class="list-group-item  package">{{code}}<span class="badge" style="color:{{#if top200}}
+                    <a href="#" class="list-group-item package">{{code}}<span class="badge" style="color:{{#if top200}}
        red
     {{else}}
-       white
+       black
     {{/if}}">{{testId}}</span></a> {{/each}}
                 </div>
             </div>
         </div>
         <!-- END CONTENT FRAME TOP -->
         <!-- START CONTENT FRAME BODY -->
-        <div class="content-frame-body content-frame-body-right" style="padding-top:12px;">
+        <div class="content-frame-body content-frame-body-right" style="vertical-align:top;padding-top:12px;">
             <table class="table">
                 <tr>
-                    <td style="width:480px;">
+                    <td style="width:480px;vertical-align:top">
                         <div class="form-group">
                             <select class="form-control select measure" style="width:460px;">
                                 <option>Lv</option>
@@ -198,18 +198,17 @@
                             </div>
                             <!-- END PROJECTS BLOCK -->
                             {{/with}}
-
                         </div>
                     </td>
                     <td style="width:330px;vertical-align:top;text-align:left;padding:5px;">
                         {{#with dim}}
-                        <p style="white-space: nowrap;">Width {{w}} px, Height {{h}} px
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="excel-export"><span class="fa fa-circle text-danger"></span>&nbsp;Export raw data</a>
+                        <p style="white-space: nowrap;">Width {{w}} px, Height {{h}} px &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="#" class="excel-export"><span class="fa fa-circle text-danger"></span>&nbsp;Export raw data</a>
                         </p>
                         <p style="white-space: nowrap;font-size:16px;">
                             {{#with konicaInfo}} {{formatNum carb_custom}}, {{formatNum cadj_custom}} {{/with}}
                         </p>
-                        <div style="position:relative;top:0,left:0;">
+                        <div style="position:relative;top:0,left:0;height:560px" class='imagecont'>
                             <img src="{{image}}" class="image" style="position:absolute;x:0,y:0;z-index:0;opacity:0.99;" />
                             <div style="position:absolute;top:0;left:0;width:{{w}}px;height:{{h}}px;opacity:1;">
                                 <svg width="{{w}}" height="{{h}}">
@@ -222,7 +221,10 @@
                         </div>
                         {{/with}}
                     </td>
-                    <td style="width:100%;">
+                    <td style="width:100%;vertical-align:top;padding-left:35px;padding-top:64px;">
+                      <div>
+                            <div id="chartxy" style="background:#BBBBBB;width:430px;height:555px"></div>
+                        </div>
                     </td>
                 </tr>
             </table>

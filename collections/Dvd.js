@@ -1,8 +1,7 @@
 
+Dvd = new Meteor.Collection("dvd");
 
-TestDataImages = new Meteor.Collection("testDataImages");
-
-TestDataImages.allow({
+Dvd.allow({
   insert: function (userId, party) {
     return false;
   },
@@ -13,4 +12,3 @@ TestDataImages.allow({
     return false;
   }
 });
-

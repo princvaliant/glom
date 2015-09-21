@@ -39,3 +39,7 @@ mizzao:autocomplete
 rcy:chromajs
 u2622:persistent-session
 manuel:reactivearray
+momentjs:moment
+canvasjs
+percolate:synced-cron
+

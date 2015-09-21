@@ -16,6 +16,8 @@ Template.tdiSearchBox.helpers({
           sort: false,
           template: Template.tdiSearchItem,
           callback : function (doc, element) {
+
+            console.log(doc);
              Session.set("tdiSearchBoxValue", doc);
           }
         }]

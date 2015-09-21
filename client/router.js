@@ -20,22 +20,19 @@ var routePublic = function (self, route) {
 
 Router.map(function () {
   this.route('/', function () {
-      routePublic(this, 'dashboard');
+      routePublic(this, 'konicaAnalysis');
   });
   this.route('/tdi', function () {
       routePublic(this, 'testVisualizationLatest');
   });
-  this.route('/dashboard', function () {
-      routePublic(this, 'dashboard');
-  });
-  this.route('/testVisualization', function () {
-    routePublic(this, 'testVisualization');
-  });
-  this.route('/konicaAnalysis', function () {
+  this.route('/konica', function () {
     routePublic(this, 'konicaAnalysis');
   });
-  this.route('/testCharts', function () {
-    routePublic(this, 'testCharts');
+  this.route('/dvd', function () {
+    routePublic(this, 'dvdAnalysis');
+  });
+  this.route('/testimages', function () {
+    routePublic(this, 'testVisualization');
   });
 });
 

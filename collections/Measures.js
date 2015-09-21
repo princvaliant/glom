@@ -1,8 +1,7 @@
 
+Measures = new Meteor.Collection("measures");
 
-TestDataImages = new Meteor.Collection("testDataImages");
-
-TestDataImages.allow({
+Measures.allow({
   insert: function (userId, party) {
     return false;
   },
@@ -13,4 +12,3 @@ TestDataImages.allow({
     return false;
   }
 });
-
