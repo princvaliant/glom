@@ -12,16 +12,18 @@ Meteor.startup(function () {
       return parser.text('every 1 hour');
     },
     job: function () {
-      return scheduler.executeAggregate(getPipeline());
+      return scheduler.executeAggregate('measures', getPipeline());
     }
   });
+
+  SyncedCron.start();
 });
 
 
 // For testing in development
 Meteor.methods({
   'formatdash': function () {
-    scheduler.executeAggregate(getPipeline());
+    scheduler.executeAggregate('measures', getPipeline());
   }
 });
 

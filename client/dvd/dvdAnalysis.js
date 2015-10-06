@@ -7,36 +7,36 @@ var chartDefs = [{
     MASK28: '.43',
     MASK29: '.15'
   },
-  range : {
-    min: 0,
-    max : 20
+  range: {
+    min: 0.0,
+    max: 25.0
   }
 }, {
   id: 'chart2',
   title: 'Top 20 EQE per wafer for any current',
   ytitle: 'EQE [%]',
   yfield: 'eqe',
-  range : {
-    min: 0,
-    max : 20
+  range: {
+    min: 0.0,
+    max: 25.0
   }
 }, {
   id: 'chart3',
   title: 'Dominant wavelength for top 20 EQE per wafer for any current',
   ytitle: 'Dominant wavelength [nm]',
   yfield: 'domwl',
-  range : {
+  range: {
     min: 470,
-    max : 600
+    max: 600
   }
 }, {
   id: 'chart4',
   title: 'Voltage for top 20 EQE per wafer for any current',
   ytitle: 'Voltage [V]',
   yfield: 'volt',
-  range : {
-    min: 0,
-    max : 10
+  range: {
+    min: 0.0,
+    max: 10.0
   }
 }];
 
@@ -84,12 +84,12 @@ function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
       fontSize: 16
     },
     animationEnabled: true,
-    animationDuration: 4000,
+    animationDuration: 700,
     axisX: {
-      title: "Wafer#",
+      title: "Exp# - Wafer#",
       titleFontSize: 14,
       labelFontSize: 11,
-      labelAngle: -12,
+      labelAngle: -35,
       interval: 1
 
     },
@@ -118,36 +118,46 @@ function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
   var counter = 1;
   for (var exp in exps) {
 
-    var series = {
-      type: 'scatter',
-      //    color: '#EE33EE',
-      markerSize: 3,
-      toolTipContent: "<span style='\"'color: {color};'\"'><strong>{name}</strong></span><br/><strong> Wafer</strong> {label} <br/><strong> Mask</strong> {mask} <br/><strong> Value</strong></span> {y}<br/><strong> Current</strong></span> {current} nA",
-      name: exp,
-      showInLegend: true,
-      dataPoints: []
-    };
-
     _.each(exps[exp], function (waferObj) {
 
-      for (var i = 0; i < 20; i++) {
-        var dataObj = waferObj.data[i];
-        if (dataObj !== undefined) {
-          if (currDensity === undefined || currDensity[dataObj.mask] === dataObj.cs) {
-            series.dataPoints.push({
-              x: counter,
-              y: dataObj[yfield],
-              label: waferObj.id.wid,
-              current: (dataObj.cv * 1000000).toFixed(0),
-              mask: dataObj.mask
-            });
-          }
+      var series = {
+        type: 'scatter',
+        markerSize: 3,
+        toolTipContent: "<span style='\"'color: {color};'\"'><strong>{name}</strong></span><br/><strong> Wafer</strong> {label} <br/><strong> Mask</strong> {mask} <br/><strong> Value</strong></span> {y}<br/><strong> Current</strong></span> {current} nA",
+        name: exp,
+        showInLegend: false,
+        dataPoints: []
+      };
+
+      var domwl  = 0;
+      _.each(waferObj.data, function (dataObj) {
+        domwl += dataObj.domwl;
+        if (currDensity === undefined || currDensity[dataObj.mask].localeCompare(dataObj.cs) === 0) {
+          series.dataPoints.push({
+            x: counter,
+            y: dataObj[yfield],
+            label: exp + '-' + waferObj.id.wid,
+            current: (dataObj.cv * 1000000).toFixed(0),
+            mask: dataObj.mask
+          });
         }
+      });
+      domwl = domwl/waferObj.data.length;
+
+      series.color = '#00FF00';
+      if (domwl < 520) {
+        series.color = '#0000FF';
+      } else
+      if (domwl > 580) {
+        series.color = '#FF0000';
       }
+
+      series.dataPoints = series.dataPoints.slice(0, 20);
       counter++;
+      chart.data.push(series);
     });
 
-    chart.data.push(series);
+
   }
 
   return chart;

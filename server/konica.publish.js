@@ -1,3 +1,10 @@
+
+
+Meteor.publish("konicaReport", function () {
+    return KonicaReport.find({});
+});
+
+
 Meteor.publish("konica", function (search) {
 
   var limit = 100;

@@ -101,6 +101,7 @@ Package.on_use(function (api) {
   api.addFiles('css/switch.css', 'client');
   api.addFiles('css/ion.rangeSlider.css', 'client');
   api.addFiles('css/ion.rangeSlider.skinFlat.css', 'client');
+  api.addFiles('css/theme-default.css', 'client');
 
   api.addFiles('fonts/fontawesome-webfont.woff', 'client');
   api.addFiles('fonts/fontawesome-webfont.ttf', 'client');

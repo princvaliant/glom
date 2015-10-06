@@ -1,0 +1,47 @@
+<template name="konicaCharts">
+    <!-- START CONTENT FRAME -->
+    <div class="content-frame" style="height:100%;width:100%">
+        <!-- START CONTENT FRAME TOP -->
+        <div class="content-frame-left" style="height:100%">
+            <div class="form-group push-up-10">
+                <h4>KONICA CHARTS</h4>
+                <!--              <div class="input-group">
+                    <div class="input-group-addon"><span class="fa fa-search"></span>
+                    </div>
+                    <input type="text" class="form-control searchPackage" placeholder="start typing ..." />
+                    <select class="form-control select testSource" placeholder="test source ...">
+                        <option>Experiment#</option>
+                        <option>Run#</option>
+                        <option>Wafer#</option>
+                    </select>
+                </div> -->
+            </div>
+        </div>
+        <!-- END CONTENT FRAME TOP -->
+        <!-- START CONTENT FRAME BODY -->
+        <div class="content-frame-body content-frame-body-right" style="height:100%;width:100%;vertical-align:top;padding-top:0px;">
+            <!-- START VERTICAL TABS WITH HEADING -->
+            <div class="panel panel-default" style="height:100%;width:100%">
+                <div class="tabs" style="height:100%;width:100%">
+                    <ul class="nav nav-tabs" role="tablist">
+                        {{#each chartDefs}}
+                        <li class="{{tabIndexFirst}}">
+                            <a href="#{{tabIndex}}" data-toggle="tab">{{title}}</a>
+                        </li>
+                        {{/each}}
+                    </ul>
+                    <div class="panel-body tab-content" style="height:100%;width:100%">
+                        {{#each chartDefs}}
+                        <div class="tab-pane {{tabIndex2First}}" id="{{tabIndex2}}" style="height:100%;width:100%">
+                            {{#each tabs}}
+                            <p id="chartid{{listIndex}}" style="height:400px;width:100%"></p>
+                            {{/each}}
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END CONTENT FRAME BODY -->
+</template>

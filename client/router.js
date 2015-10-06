@@ -28,6 +28,9 @@ Router.map(function () {
   this.route('/konica', function () {
     routePublic(this, 'konicaAnalysis');
   });
+  this.route('/konicacharts', function () {
+    routePublic(this, 'konicaCharts');
+  });
   this.route('/dvd', function () {
     routePublic(this, 'dvdAnalysis');
   });

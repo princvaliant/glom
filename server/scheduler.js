@@ -4,10 +4,10 @@ var exec = Npm.require('child_process').exec;
 
 scheduler = {
 
-  executeAggregate: function (pipeline) {
+  executeAggregate: function (collection, pipeline) {
 
     var ret = '';
-    var aggr = process.env.MONGO_URL.replace('db://', ' ') + ' --eval \'db.measures.aggregate(' + pipeline + ', {allowDiskUse: true})\'';
+    var aggr = process.env.MONGO_URL.replace('db://', ' ') + ' --eval \'db.' + collection + '.aggregate(' + pipeline + ', {allowDiskUse: true})\'';
     child = exec(aggr, function (error, stdout, stderr) {
       ret = 'stdout: ' + stdout + ' stderr: ' + stderr;
       if (error !== null) {
@@ -16,10 +16,10 @@ scheduler = {
       }
     });
   },
-  executeMapReduce: function (mapreduce) {
+  executeMapReduce: function (collection, mapreduce) {
 
     var ret = '';
-    var aggr = process.env.MONGO_URL.replace('db://', ' ') + ' --eval \'db.measures.mapReduce(' + mapreduce + ')\'';
+    var aggr = process.env.MONGO_URL.replace('db://', ' ') + ' --eval \'db.' + collection + '.mapReduce(' + mapreduce + ')\'';
     child = exec(aggr, function (error, stdout, stderr) {
       ret = 'stdout: ' + stdout + ' stderr: ' + stderr;
       if (error !== null) {
