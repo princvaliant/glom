@@ -4,7 +4,7 @@
         <!-- START CONTENT FRAME TOP -->
         <div class="content-frame-left" style="height:100%">
             <div class="form-group push-up-10">
-                <h4>KONICA CHARTS</h4>
+                <h4>iBLU/iLGP CHARTS</h4>
                 <!--              <div class="input-group">
                     <div class="input-group-addon"><span class="fa fa-search"></span>
                     </div>
@@ -19,10 +19,10 @@
         </div>
         <!-- END CONTENT FRAME TOP -->
         <!-- START CONTENT FRAME BODY -->
-        <div class="content-frame-body content-frame-body-right" style="height:100%;width:100%;vertical-align:top;padding-top:0px;">
+        <div class="content-frame-body content-frame-body-right" style="width:100%;vertical-align:top;padding-top:0px;">
             <!-- START VERTICAL TABS WITH HEADING -->
-            <div class="panel panel-default" style="height:100%;width:100%">
-                <div class="tabs" style="height:100%;width:100%">
+            <div class="panel panel-default" style="width:100%">
+                <div class="tabs" style="width:100%">
                     <ul class="nav nav-tabs" role="tablist">
                         {{#each chartDefs}}
                         <li class="{{tabIndexFirst}}">
@@ -30,9 +30,9 @@
                         </li>
                         {{/each}}
                     </ul>
-                    <div class="panel-body tab-content" style="height:100%;width:100%">
+                    <div class="panel-body tab-content" style="width:100%">
                         {{#each chartDefs}}
-                        <div class="tab-pane {{tabIndex2First}}" id="{{tabIndex2}}" style="height:100%;width:100%">
+                        <div class="tab-pane {{tabIndex2First}}" id="{{tabIndex2}}" style="width:100%">
                             {{#each tabs}}
                             <p id="chartid{{listIndex}}" style="height:400px;width:100%"></p>
                             {{/each}}

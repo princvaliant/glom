@@ -29,7 +29,10 @@ Meteor.methods({
 
 var query = {
   'value.glo_camera_test': {
-    '$exists': true
+    $exists: true
+  },
+  'unit.build_number': {
+    $regex: '^PBLD'
   },
   'value.iblu_incomming_inspection.actualStart': {
     $gt: 'DATEFILTER'
@@ -39,6 +42,7 @@ var query = {
 var fields = {
   iblu: '$code',
   date: '$value.iblu_incomming_inspection.actualStart',
+  dtype: '$unit.ilgp-iblu',
   build_number: '$unit.build_number',
   avg_135pt: '$value.glo_camera_test.avg_135pt',
   avg_13pt: '$value.glo_camera_test.avg_13pt',
@@ -55,8 +59,12 @@ var fields = {
   ciey_135pt: '$value.glo_camera_test.ciey_135pt',
   ciex_13pt: '$value.glo_camera_test.ciex_13pt',
   ciey_13pt: '$value.glo_camera_test.ciey_13pt',
-  color_shift_arbitrary135pt: '$value.glo_camera_test.color_shift_arbitrary135pt',
-  color_shift_arbitrary69pt: '$value.glo_camera_test.color_shift_arbitrary69pt',
+  csarb_135pt: '$value.glo_camera_test.color_shift_arbitrary_135pt',
+  csarb_126pt: '$value.glo_camera_test.color_shift_arbitrary_126pt',
+  csarb_84pt: '$value.glo_camera_test.color_shift_arbitrary_84pt',
+  csadj_135pt: '$value.glo_camera_test.color_shift_adjacent_135pt',
+  csadj_126pt: '$value.glo_camera_test.color_shift_adjacent_126pt',
+  csadj_84pt: '$value.glo_camera_test.color_shift_adjacent_84pt',
   comment: '$unit.comment',
   adhesive: '$unit.epoxy',
   encapsulant: '$unit.encapsulant',
@@ -67,12 +75,26 @@ var fields = {
   offset_tail: '$value.ilgp_mechanical_characterization.lgp_offset_fpc_side',
   offset_non_tail: '$value.ilgp_mechanical_characterization.lgp_offset_non_fpc_side',
   pull_force_kg: '$value.ilgp_pull_force_test.pull_force',
-  build_date:  {
-    $concat : [
-        { $substr: [ "$unit.build_number", 8, 2 ] },
-        { $substr: [ "$unit.build_number", 4, 2 ] },
-        { $substr: [ "$unit.build_number", 6, 2 ] },
-    ]
+  build_date: {
+    $cond: [{
+       $eq : [{$toUpper:{$substr: [ "$unit.build_number", 0, 8 ]}}, 'PBLDILGP']
+    }, {
+      $concat: [{
+        $substr: ["$unit.build_number", 12, 2]
+      }, {
+        $substr: ["$unit.build_number", 8, 2]
+      }, {
+        $substr: ["$unit.build_number", 10, 2]
+      }]
+    }, {
+      $concat: [{
+        $substr: ["$unit.build_number", 8, 2]
+      }, {
+        $substr: ["$unit.build_number", 4, 2]
+      }, {
+        $substr: ["$unit.build_number", 6, 2]
+      }]
+    }]
   }
 };
 
@@ -86,7 +108,7 @@ function getPipeline() {
     $project: fields
   }, {
     $sort: {
-      date: -1
+      build_date: -1
     }
   }, {
     $out: 'konicaReport'

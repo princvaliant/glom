@@ -9,7 +9,7 @@ var chartDefs = [{
   },
   range: {
     min: 0.0,
-    max: 25.0
+    max: 15.0
   }
 }, {
   id: 'chart2',
@@ -18,7 +18,7 @@ var chartDefs = [{
   yfield: 'eqe',
   range: {
     min: 0.0,
-    max: 25.0
+    max: 15.0
   }
 }, {
   id: 'chart3',
@@ -26,11 +26,20 @@ var chartDefs = [{
   ytitle: 'Dominant wavelength [nm]',
   yfield: 'domwl',
   range: {
-    min: 470,
-    max: 600
+    min: 450,
+    max: 630
   }
 }, {
   id: 'chart4',
+  title: 'Peak wavelength for top 20 EQE per wafer for any current',
+  ytitle: 'Peak wavelength [nm]',
+  yfield: 'peakwl',
+  range: {
+    min: 450,
+    max: 630
+  }
+}, {
+  id: 'chart5',
   title: 'Voltage for top 20 EQE per wafer for any current',
   ytitle: 'Voltage [V]',
   yfield: 'volt',
@@ -129,9 +138,9 @@ function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
         dataPoints: []
       };
 
-      var domwl  = 0;
+      var peakwl  = 0;
       _.each(waferObj.data, function (dataObj) {
-        domwl += dataObj.domwl;
+        peakwl += dataObj.peakwl;
         if (currDensity === undefined || currDensity[dataObj.mask].localeCompare(dataObj.cs) === 0) {
           series.dataPoints.push({
             x: counter,
@@ -142,13 +151,14 @@ function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
           });
         }
       });
-      domwl = domwl/waferObj.data.length;
+      peakwl = peakwl/waferObj.data.length;
 
-      series.color = '#00FF00';
-      if (domwl < 520) {
+      series.color = '#444444';
+      if (peakwl >= 450 && peakwl <= 480) {
         series.color = '#0000FF';
-      } else
-      if (domwl > 580) {
+      } else if (peakwl >= 500 && peakwl <= 540) {
+        series.color = '#00FF00';
+      } else if (peakwl >= 600 && peakwl <= 630) {
         series.color = '#FF0000';
       }
 

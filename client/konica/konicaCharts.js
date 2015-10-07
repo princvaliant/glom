@@ -28,7 +28,7 @@ Template.konicaCharts.rendered = function () {
           range.min = chartDef.r[0];
           range.max = chartDef.r[1];
         }
-        var chart = constructChart(chartDef.t, chartDef.t, chartDef.y, chartDef.x, range);
+        var chart = constructChart(chartDef.t, chartDef.t, chartDef.y, chartDef.x, range, chartDef.q);
         var chartR = new CanvasJS.Chart('chartid' + index, chart);
         chart.legend.itemclick = function (e) {
           if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
@@ -66,7 +66,7 @@ Template.konicaCharts.helpers({
   }
 });
 
-function constructChart(title, ytitle, yfield, xfield, range) {
+function constructChart(title, ytitle, yfield, xfield, range, query) {
 
   var chart = {
     height: 400,
@@ -103,11 +103,12 @@ function constructChart(title, ytitle, yfield, xfield, range) {
   if (range.min) {
     chart.axisY.minimum = range.min;
     chart.axisY.maximum = range.max;
+    chart.axisY.interval = (range.max - range.min) / 5;
   }
 
   var sort = {};
   sort[xfield] = 1;
-  var datalist = KonicaReport.find({}, {
+  var datalist = KonicaReport.find(query || {}, {
     sort: sort
   }).fetch();
 
@@ -129,6 +130,14 @@ function constructChart(title, ytitle, yfield, xfield, range) {
 
   function doseries(row) {
 
+    var yval = row[yfield];
+    if (yval < range.min) {
+      yval = range.min;
+    } else
+    if (yval > range.max) {
+       yval = range.max;
+    }
+
     var series = {
       type: 'scatter',
       color: colors[counter],
@@ -140,7 +149,7 @@ function constructChart(title, ytitle, yfield, xfield, range) {
     };
     series.dataPoints.push({
       x: counter2,
-      y: row[yfield],
+      y: yval,
       label: bd
     });
     chart.data.push(series);
