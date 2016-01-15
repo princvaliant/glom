@@ -116,7 +116,7 @@ function getPipeline() {
 
   var p = JSON.stringify(pipeline);
 
-  p = p.replace('\"DATEFILTER\"', 'new ISODate(\"' + moment().subtract(120, 'days').toISOString() + '\")');
+  p = p.replace('\"DATEFILTER\"', 'new ISODate(\"' + moment().subtract(150, 'days').toISOString() + '\")');
 
   return p;
 }

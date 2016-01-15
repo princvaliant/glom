@@ -1,25 +1,12 @@
 <template name="dvdAnalysis">
     <!-- START CONTENT FRAME -->
-    <div class="content-frame" style="height:100%">
-        <!-- START CONTENT FRAME TOP -->
-        <div class="content-frame-left" style="height:100%">
-            <div class="form-group push-up-10">
-                <h4>DVD ANALYSIS</h4>
-   <!--              <div class="input-group">
-                    <div class="input-group-addon"><span class="fa fa-search"></span>
-                    </div>
-                    <input type="text" class="form-control searchPackage" placeholder="start typing ..." />
-                    <select class="form-control select testSource" placeholder="test source ...">
-                        <option>Experiment#</option>
-                        <option>Run#</option>
-                        <option>Wafer#</option>
-                    </select>
-                </div> -->
-            </div>
-        </div>
-        <!-- END CONTENT FRAME TOP -->
+    <div style="margin-top:10px;height:100%">
+        <h4>DVD ANALYSIS</h4>
+        {{#if tasksLoading}}
+        <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591">
+        {{/if}}
         <!-- START CONTENT FRAME BODY -->
-        <div class="content-frame-body content-frame-body-right" style="vertical-align:top;padding-top:0px;">
+        <div class="content-frame-body content-frame-body-right" style="vertical-align:top;">
             <table class="table">
                 {{#each chartDefs}}
                 <tr>

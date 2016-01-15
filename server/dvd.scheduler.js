@@ -3,15 +3,15 @@
  * @type {meteor.startup}
  */
 
-Meteor.startup(function () {
+Meteor.startup(function() {
 
   SyncedCron.add({
     name: 'Prepare collections for dashboard page',
-    schedule: function (parser) {
+    schedule: function(parser) {
       // parser is a later.parse object
       return parser.text('every 1 hour');
     },
-    job: function () {
+    job: function() {
       return scheduler.executeAggregate('measures', getPipeline());
     }
   });
@@ -22,8 +22,12 @@ Meteor.startup(function () {
 
 // For testing in development
 Meteor.methods({
-  'formatdash': function () {
+  'formatdash': function() {
     scheduler.executeAggregate('measures', getPipeline());
+  },
+
+  'formatdash2': function() {
+    scheduler.executeAggregate('measures', getPipeline2());
   }
 });
 
@@ -54,7 +58,8 @@ var fields = {
   u: '$u',
   v: '$v1960',
   dt: '$devtype',
-  area: '$actarea'
+  area: '$actarea',
+  date: '$TimeRun'
 };
 
 function getPipeline() {
@@ -75,6 +80,9 @@ function getPipeline() {
       _id: {
         exp: '$exp',
         wid: '$wid'
+      },
+      'date': {
+        $last: '$date'
       },
       data: {
         $push: {
@@ -98,6 +106,7 @@ function getPipeline() {
     $project: {
       _id: '$__id',
       id: '$_id',
+      date: '$date',
       data: '$data'
     }
   }, {
@@ -106,7 +115,52 @@ function getPipeline() {
 
   var p = JSON.stringify(pipeline);
 
-  p = p.replace('\"DATEFILTER\"', 'new ISODate(\"' + moment().subtract(90, 'days').toISOString() + '\")');
+  p = p.replace('\"DATEFILTER\"', 'new ISODate(\"' + moment().subtract(180, 'days').toISOString() + '\")');
+
+  return p;
+}
+
+
+function getPipeline2() {
+
+  var offset = Math.abs(moment().utcOffset() * 60000);
+
+  var pipeline = [{
+    $match: query
+  }, {
+    $project: fields
+  }, {
+    $sort: {
+      wid: 1,
+      eqe: -1
+    }
+  }, {
+    $project: {
+      _id: '$_id',
+      exp: '$exp',
+      wid: '$wid',
+      did: '$did',
+      cv: '$cv',
+      cs: '$cs',
+      eqe: '$eqe',
+      domwl: '$domwl',
+      peakwl: '$peakwl',
+      volt: '$volt',
+      mask: '$mask',
+      lv: '$lv',
+      u: '$u',
+      v: '$v',
+      dt: '$dt',
+      area: '$area',
+      date: '$date'
+    }
+  }, {
+    $out: 'dvde'
+  }];
+
+  var p = JSON.stringify(pipeline);
+
+  p = p.replace('\"DATEFILTER\"', 'new ISODate(\"' + moment().subtract(200, 'days').toISOString() + '\")');
 
   return p;
 }

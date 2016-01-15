@@ -103,6 +103,10 @@ Meteor.methods({
     var h = raw[0].length;
     var y2 = h - 1 - y;
 
+    console.log(m);
+    console.log(w);
+    console.log(h);
+
     var xpoints = [];
     var ypoints = [];
     for (var i = 1; i < w; i++) {
