@@ -36,7 +36,7 @@ var chartDefs = [{
   title: 'Peak wavelength for top 20 EQE per wafer for any current',
   ytitle: 'Peak wavelength [nm]',
   yfield: 'peakwl',
-  niDotField: 'peak04',
+  niDotField: 'peak1',
   range: {
     min: 450,
     max: 630
@@ -46,7 +46,7 @@ var chartDefs = [{
   title: 'Voltage for top 20 EQE per wafer for any current',
   ytitle: 'Voltage [V]',
   yfield: 'volt',
-  niDotField: 'v04',
+  niDotField: 'v1',
   range: {
     min: 0.0,
     max: 10.0
@@ -131,7 +131,7 @@ function constructChart(datalist, niDots, title, ytitle, yfield, range, currDens
 
       var series = {
         type: 'scatter',
-        markerSize: 3,
+        markerSize: 2,
         toolTipContent: "<span style='\"'color: {color};'\"'><strong>{name}</strong></span><br/><strong> Wafer</strong> {label} <br/><strong> Mask</strong> {mask} <br/><strong> Value</strong></span> {y}<br/><strong> Current</strong></span> {current} nA",
         name: exp,
         showInLegend: false,
@@ -147,7 +147,7 @@ function constructChart(datalist, niDots, title, ytitle, yfield, range, currDens
         series2 = {
           type: 'scatter',
           markerType: "triangle",
-          markerSize: 8,
+          markerSize: 9,
           toolTipContent: "<span style='\"'color: {color};'\"'><strong>Ni Dot Peak EQE</strong></span><br/><strong> Wafer</strong> {label} <br/><strong> Value</strong></span> {y}<br/>",
           name: waferObj.id.wid,
           showInLegend: false,

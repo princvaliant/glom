@@ -15,11 +15,17 @@ Meteor.methods({
   'getNiDot': function() {
     var ret = DataReports.find({
       parentCode: null,
-      'value.tags': {$in: ['nwLED|epi|ni_dot_test']},
+      'value.tags': {
+        $in: ['nwLED|epi|ni_dot_test']
+      },
       'value.productCode': '100',
-      'value.ni_dot_test.peak08': {
-        $exists: 1
+      'value.test_data_visualization.mask': {
+        $in: ['MASK28', 'MASK29']
       }
+      // ,
+      // 'value.ni_dot_test.peak08': {
+      //   $exists: 1
+      // }
     }, {
       fields: {
         code: 1,
