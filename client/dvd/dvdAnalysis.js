@@ -3,6 +3,7 @@ var chartDefs = [{
   title: 'Top 20 EQE per wafer for current density 0.15A/cm2',
   ytitle: 'EQE [%]',
   yfield: 'eqe',
+  niDotField: 'PeakEQE',
   currentDensity: {
     MASK28: '.43',
     MASK29: '.15'
@@ -16,6 +17,7 @@ var chartDefs = [{
   title: 'Top 20 EQE per wafer for any current',
   ytitle: 'EQE [%]',
   yfield: 'eqe',
+  niDotField: 'PeakEQE',
   range: {
     min: 0.0,
     max: 18.0
@@ -34,6 +36,7 @@ var chartDefs = [{
   title: 'Peak wavelength for top 20 EQE per wafer for any current',
   ytitle: 'Peak wavelength [nm]',
   yfield: 'peakwl',
+  niDotField: 'peak04',
   range: {
     min: 450,
     max: 630
@@ -43,6 +46,7 @@ var chartDefs = [{
   title: 'Voltage for top 20 EQE per wafer for any current',
   ytitle: 'Voltage [V]',
   yfield: 'volt',
+  niDotField: 'v04',
   range: {
     min: 0.0,
     max: 10.0
@@ -50,40 +54,25 @@ var chartDefs = [{
 }];
 
 
-
-
-
 Template.dvdAnalysis.rendered = function() {
   Session.set('tasksLoading', true);
-  Meteor.subscribe('dvd', function() {
-    Session.set('tasksLoading', false);
-
-    var datalist = Dvd.find({}, {
-      sort: {
-        'id.exp': 1,
-        'id.wid': 1
-      }
-    }).fetch();
-
-    var datalistTrend = Dvd.find({}, {
-      sort: {
-        'date': 1
-      }
-    }).fetch();
-
-    _.each(chartDefs, function(chartDef) {
-      var chart;
-      chart = constructChart(datalist, chartDef.title, chartDef.ytitle, chartDef.yfield, chartDef.range, chartDef.currentDensity);
-      var chartR = new CanvasJS.Chart(chartDef.id, chart);
-      chart.legend.itemclick = function(e) {
-        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-          e.dataSeries.visible = false;
-        } else {
-          e.dataSeries.visible = true;
-        }
+  Meteor.call('getDvd', function(error, datalist) {
+    Meteor.call('getNiDot', function(error, niDots) {
+      _.each(chartDefs, function(chartDef) {
+        var chart;
+        chart = constructChart(datalist, niDots, chartDef.title, chartDef.ytitle, chartDef.yfield, chartDef.range, chartDef.currentDensity, chartDef.niDotField);
+        var chartR = new CanvasJS.Chart(chartDef.id, chart);
+        Session.set('tasksLoading', false);
+        chart.legend.itemclick = function(e) {
+          if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+            e.dataSeries.visible = false;
+          } else {
+            e.dataSeries.visible = true;
+          }
+          chartR.render();
+        };
         chartR.render();
-      };
-      chartR.render();
+      });
     });
   });
 };
@@ -92,12 +81,12 @@ Template.dvdAnalysis.helpers({
   chartDefs: function() {
     return chartDefs;
   },
-  tasksLoading: function () {
+  tasksLoading: function() {
     return Session.get('tasksLoading');
   }
 });
 
-function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
+function constructChart(datalist, niDots, title, ytitle, yfield, range, currDensity, niDotField) {
 
   var chart = {
     title: {
@@ -131,7 +120,6 @@ function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
     data: []
   };
 
-
   var exps = _.groupBy(datalist, function(waferData) {
     return waferData.id.exp;
   });
@@ -150,12 +138,34 @@ function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
         dataPoints: []
       };
 
+      var nidot = _.filter(niDots, function(o) {
+        return o.code === waferObj.id.wid;
+      });
+      var series2 = {};
+      if (nidot.length === 1 && niDotField) {
+        var ndv = nidot[0].value.ni_dot_test[niDotField];
+        series2 = {
+          type: 'scatter',
+          markerType: "triangle",
+          markerSize: 8,
+          toolTipContent: "<span style='\"'color: {color};'\"'><strong>Ni Dot Peak EQE</strong></span><br/><strong> Wafer</strong> {label} <br/><strong> Value</strong></span> {y}<br/>",
+          name: waferObj.id.wid,
+          showInLegend: false,
+          dataPoints: [{
+            x: counter,
+            y: ndv,
+            label: exp + '-' + waferObj.id.wid
+          }]
+        };
+      }
+
       var peakwl = 0;
       var qtywl = 0;
       _.each(waferObj.data, function(dataObj) {
         if (dataObj.peakwl > 400 && dataObj.peakwl < 700) {
           peakwl += dataObj.peakwl;
           qtywl += 1;
+          //       console.log(waferObj.id.wid + ' ' + dataObj.cs);
           if (currDensity === undefined || currDensity[dataObj.mask].localeCompare(dataObj.cs) === 0) {
             series.dataPoints.push({
               x: counter,
@@ -176,15 +186,14 @@ function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
       } else if (peakwl >= 600 && peakwl <= 630) {
         series.color = '#FF0000';
       }
+      series2.color = series.color;
 
       series.dataPoints = series.dataPoints.slice(0, 20);
       counter++;
       chart.data.push(series);
+      chart.data.push(series2);
     });
-
-
   }
-
   return chart;
 }
 
