@@ -12,6 +12,18 @@ Meteor.methods({
     }).fetch();
   },
 
+  'getDvdNoData': function() {
+    return Dvd.find({}, {
+      sort: {
+        'id.exp': 1,
+        'id.wid': 1
+      },
+      fields: {
+        id : 1
+      }
+    }).fetch();
+  },
+
   'getNiDot': function() {
     var ret = DataReports.find({
       parentCode: null,

@@ -24,10 +24,6 @@ Meteor.startup(function() {
 Meteor.methods({
   'formatdash': function() {
     scheduler.executeAggregate('measures', getPipeline());
-  },
-
-  'formatdash2': function() {
-    scheduler.executeAggregate('measures', getPipeline2());
   }
 });
 
@@ -116,51 +112,6 @@ function getPipeline() {
   var p = JSON.stringify(pipeline);
 
   p = p.replace('\"DATEFILTER\"', 'new ISODate(\"' + moment().subtract(180, 'days').toISOString() + '\")');
-
-  return p;
-}
-
-
-function getPipeline2() {
-
-  var offset = Math.abs(moment().utcOffset() * 60000);
-
-  var pipeline = [{
-    $match: query
-  }, {
-    $project: fields
-  }, {
-    $sort: {
-      wid: 1,
-      eqe: -1
-    }
-  }, {
-    $project: {
-      _id: '$_id',
-      exp: '$exp',
-      wid: '$wid',
-      did: '$did',
-      cv: '$cv',
-      cs: '$cs',
-      eqe: '$eqe',
-      domwl: '$domwl',
-      peakwl: '$peakwl',
-      volt: '$volt',
-      mask: '$mask',
-      lv: '$lv',
-      u: '$u',
-      v: '$v',
-      dt: '$dt',
-      area: '$area',
-      date: '$date'
-    }
-  }, {
-    $out: 'dvde'
-  }];
-
-  var p = JSON.stringify(pipeline);
-
-  p = p.replace('\"DATEFILTER\"', 'new ISODate(\"' + moment().subtract(200, 'days').toISOString() + '\")');
 
   return p;
 }

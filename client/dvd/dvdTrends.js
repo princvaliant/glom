@@ -1,40 +1,46 @@
-var chartDefs = [{
-  id: 'chart1',
-  title: 'Top 20 EQE per wafer for any current trend',
-  ytitle: 'EQE [%]',
-  yfield: 'eqe',
-  range: {
-    min: 0.0,
-    max: 18.0
-  }
-}];
-
 Template.dvdTrends.rendered = function() {
-  Meteor.call('getDvd', function(error, datalist) {
-    _.each(chartDefs, function(chartDef) {
-      chart = constructChart(datalist, chartDef.title, chartDef.ytitle, chartDef.yfield, chartDef.range, chartDef.currentDensity);
-      var chartR = new CanvasJS.Chart(chartDef.id, chart);
-      chart.legend.itemclick = function(e) {
-        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-          e.dataSeries.visible = false;
-        } else {
-          e.dataSeries.visible = true;
-        }
-        chartR.render();
-      };
-      chartR.render();
-    });
+  Session.set('tasksLoading', true);
+  Meteor.call('getDvdNoData', function(error, datalist) {
+    If2vChart(datalist);
   });
 };
 
 Template.dvdTrends.helpers({
-  chartDefs: function() {
-    return chartDefs;
+  tasksLoading: function() {
+    return Session.get('tasksLoading');
   }
 });
 
+function If2vChart(datalist) {
 
-function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
+  var chartDef = {
+    title: 'Current at 2 volts',
+    ytitle: 'Current [mA]',
+    yfields: ['iavg', 'istd'],
+    range: {
+      min: 0.0,
+      max: 0.01
+    }
+  };
+
+  Meteor.call('getIf2v', function(error, if2vs) {
+    var chart;
+    chart = constructChart(datalist, if2vs, chartDef.title, chartDef.ytitle, chartDef.yfields, chartDef.range);
+    var chartR = new CanvasJS.Chart('chartTrend1', chart);
+    Session.set('tasksLoading', false);
+    chart.legend.itemclick = function(e) {
+      if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+        e.dataSeries.visible = false;
+      } else {
+        e.dataSeries.visible = true;
+      }
+      chartR.render();
+    };
+    chartR.render();
+  });
+}
+
+function constructChart(datalist, if2vs, title, ytitle, yfields) {
 
   var chart = {
     title: {
@@ -44,7 +50,7 @@ function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
     animationEnabled: false,
     animationDuration: 700,
     axisX: {
-      title: "Date",
+      title: "Exp# - Wafer#",
       titleFontSize: 14,
       labelFontSize: 11,
       labelAngle: -35,
@@ -52,11 +58,19 @@ function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
 
     },
     axisY: {
-      title: ytitle,
+      title: 'Avg current at 2V',
       titleFontSize: 14,
       labelFontSize: 11,
-      minimum: range.min,
-      maximum: range.max,
+      minimum: 0,
+      maximum: 0.02,
+      gridThickness: 1
+    },
+    axisY2: {
+      title: 'Standard deviation',
+      titleFontSize: 14,
+      labelFontSize: 11,
+      minimum: 0,
+      maximum: 1,
       gridThickness: 1
     },
     legend: {
@@ -68,56 +82,39 @@ function constructChart(datalist, title, ytitle, yfield, range, currDensity) {
     data: []
   };
 
-
-  var dates = _.groupBy(datalist, function(waferData) {
-    return waferData.date;
-  });
-
   var counter = 1;
-  for (var date in dates) {
-
-    _.each(dates[date], function(waferObj) {
-
-      var series = {
-        type: 'scatter',
-        markerSize: 3,
-        toolTipContent: "<span style='\"'color: {color};'\"'><strong>{name}</strong></span><br/><strong> Wafer</strong> {label} <br/><strong> Mask</strong> {mask} <br/><strong> Value</strong></span> {y}<br/><strong> Current</strong></span> {current} nA",
-        name: date,
-        showInLegend: false,
-        dataPoints: []
-      };
-
-      var peakwl = 0;
-      _.each(waferObj.data, function(dataObj) {
-        peakwl += dataObj.peakwl;
-        if (currDensity === undefined || currDensity[dataObj.mask].localeCompare(dataObj.cs) === 0) {
-          series.dataPoints.push({
-            x: counter,
-            y: dataObj[yfield],
-            label: moment(date).format('YYYY-MM-DD'),
-            current: (dataObj.cv * 1000000).toFixed(0),
-            mask: dataObj.mask
-          });
-        }
-      });
-      peakwl = peakwl / waferObj.data.length;
-
-      series.color = '#444444';
-      if (peakwl >= 450 && peakwl <= 480) {
-        series.color = '#0000FF';
-      } else if (peakwl >= 500 && peakwl <= 540) {
-        series.color = '#00FF00';
-      } else if (peakwl >= 600 && peakwl <= 630) {
-        series.color = '#FF0000';
-      }
-
-      if (series.color !== '#FF0000') {
-        series.dataPoints = series.dataPoints.slice(0, 20);
-        counter++;
-        chart.data.push(series);
-      }
+  var series = {};
+  for (var dobj in datalist) {
+    var waferObj = datalist[dobj];
+    var if2v = _.filter(if2vs, function(o) {
+      return o._id === waferObj.id.wid;
     });
-  }
+    if (if2v.length === 1) {
+      _.each(yfields, function(s) {
+        if (!series[s]) {
+          series[s] = {
+            type: 'scatter',
+            color: s == 'iavg' ? 'black' : 'orange',
+            markerSize: 5,
+            toolTipContent: "<span style='\"'color: {color};'\"'><strong>{name}</strong></span><br/><strong> Wafer</strong> {label} <br/><strong> Mask</strong> {mask} <br/><strong> Value</strong></span> {y}<br/><strong> Current</strong></span> {current} mA",
+            name: s,
+            showInLegend: true,
+            dataPoints: []
+          };
+          if (s === 'istd') {
+            series[s].axisYType = 'secondary';
+          }
+          chart.data.push( series[s]);
+        }
 
+        series[s].dataPoints.push({
+          x: counter,
+          y: if2v[0][s],
+          label: waferObj.id.exp + '-' + waferObj.id.wid
+        });
+      });
+      counter++;
+    }
+  }
   return chart;
 }
