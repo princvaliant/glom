@@ -34,8 +34,8 @@ Router.map(function () {
   this.route('/dvd', function () {
     routePublic(this, 'dvdAnalysis');
   });
-  this.route('/dvdtrends', function () {
-    routePublic(this, 'dvdTrends');
+  this.route('/dvdif2v', function () {
+    routePublic(this, 'dvdIF2V');
   });
   this.route('/testimages', function () {
     routePublic(this, 'testVisualization');

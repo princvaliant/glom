@@ -12,7 +12,7 @@ scheduler = {
       ret = 'stdout: ' + stdout + ' stderr: ' + stderr;
       if (error !== null) {
         ret += 'exec error: ' + error;
-        console.log(error);
+        console.log(ret);
       }
     });
   },
