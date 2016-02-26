@@ -37,6 +37,9 @@ Router.map(function () {
   this.route('/dvdif2v', function () {
     routePublic(this, 'dvdIF2V');
   });
+  this.route('/couponYield', function () {
+    routePublic(this, 'couponYield');
+  });
   this.route('/testimages', function () {
     routePublic(this, 'testVisualization');
   });

@@ -1,0 +1,19 @@
+<template name="couponYield">
+    <!-- START CONTENT FRAME -->
+    <div style="margin-top:10px;height:100%">
+        {{#if tasksLoading}}
+        <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591">
+        {{/if}}
+        <!-- START CONTENT FRAME BODY -->
+        <div class="content-frame-body content-frame-body-right" style="vertical-align:top;">
+            <table class="table">
+                <tr>
+                    <td style="width:100%;vertical-align:top;padding-left:15px;padding-top:24px;">
+                        <div id="chartCY1" style="height: 450px; width: 96%;"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- END CONTENT FRAME BODY -->
+</template>
