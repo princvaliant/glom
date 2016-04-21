@@ -20,7 +20,7 @@ Meteor.startup(function() {
 });
 
 
-// For testing in development
+// For testing in developmentdf
 Meteor.methods({
     'formatdash': function() {
         scheduler.executeAggregate('measures', getPipeline());

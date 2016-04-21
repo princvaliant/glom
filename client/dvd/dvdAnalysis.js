@@ -42,6 +42,20 @@ var chartDefs = [{
   }
 }, {
   id: 'chart4',
+  title: 'Top 20 EQE per wafer for current density 3.50A/cm2',
+  ytitle: 'EQE [%]',
+  yfield: 'eqe',
+  niDotField: 'PeakEQE',
+  currentDensity: {
+    MASK28: '9',
+    MASK29: '3.50'
+  },
+  range: {
+    min: 0.0,
+    max: 16.0
+  }
+}, {
+  id: 'chart5',
   title: 'Top 20 EQE per wafer for any current',
   ytitle: 'EQE [%]',
   yfield: 'eqe',
@@ -51,7 +65,7 @@ var chartDefs = [{
     max: 18.0
   }
 }, {
-  id: 'chart5',
+  id: 'chart6',
   title: 'Dominant wavelength for top 20 EQE per wafer for any current',
   ytitle: 'Dominant wavelength [nm]',
   yfield: 'domwl',
@@ -60,7 +74,7 @@ var chartDefs = [{
     max: 630
   }
 }, {
-  id: 'chart6',
+  id: 'chart7',
   title: 'Peak wavelength for top 20 EQE per wafer for any current',
   ytitle: 'Peak wavelength [nm]',
   yfield: 'peakwl',
@@ -70,7 +84,7 @@ var chartDefs = [{
     max: 630
   }
 }, {
-  id: 'chart7',
+  id: 'chart8',
   title: 'Voltage for top 20 EQE per wafer for any current',
   ytitle: 'Voltage [V]',
   yfield: 'volt',
