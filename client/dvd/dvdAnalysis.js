@@ -6,7 +6,8 @@ var chartDefs = [{
   niDotField: 'PeakEQE',
   currentDensity: {
     MASK28: '.43',
-    MASK29: '.15'
+    MASK29: '.15',
+    MASK39: '.43'
   },
   range: {
     min: 0.0,
@@ -20,7 +21,8 @@ var chartDefs = [{
   niDotField: 'PeakEQE',
   currentDensity: {
     MASK28: '1',
-    MASK29: '.30'
+    MASK29: '.30',
+    MASK39: '1'
   },
   range: {
     min: 0.0,
@@ -34,7 +36,8 @@ var chartDefs = [{
   niDotField: 'PeakEQE',
   currentDensity: {
     MASK28: '2',
-    MASK29: '.60'
+    MASK29: '.60',
+    MASK39: '2'
   },
   range: {
     min: 0.0,
@@ -48,7 +51,8 @@ var chartDefs = [{
   niDotField: 'PeakEQE',
   currentDensity: {
     MASK28: '9',
-    MASK29: '3.50'
+    MASK29: '3.50',
+    MASK39: '9'
   },
   range: {
     min: 0.0,

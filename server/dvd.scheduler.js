@@ -30,9 +30,9 @@ Meteor.methods({
 var query = {
     TestType: 'test_data_visualization',
     mask: {
-        $in: ['MASK28', 'MASK29']
+        $in: ['MASK28', 'MASK29', 'MASK39']
     },
-    devtype: '20x20',
+    devtype: {$in: ['', '20x20']},
     'DateTimeTested': {
         $gt: 'DATEFILTER'
     }
