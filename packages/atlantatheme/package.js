@@ -103,31 +103,33 @@ Package.on_use(function (api) {
   api.addFiles('css/ion.rangeSlider.skinFlat.css', 'client');
   api.addFiles('css/theme-default.css', 'client');
 
-  api.addFiles('fonts/fontawesome-webfont.woff', 'client');
-  api.addFiles('fonts/fontawesome-webfont.ttf', 'client');
+  api.addAssets('fonts/fontawesome-webfont.woff', 'client');
+  api.addAssets('fonts/fontawesome-webfont.ttf', 'client');
+  api.addAssets('fonts/fontawesome-webfont.eot', 'client');
+  api.addAssets('fonts/fontawesome-webfont.svg', 'client');
 
-  api.addFiles('fonts/glyphicons-halflings-regular.eot', 'client');
-  api.addFiles('fonts/glyphicons-halflings-regular.svg', 'client');
-  api.addFiles('fonts/glyphicons-halflings-regular.ttf', 'client');
-  api.addFiles('fonts/glyphicons-halflings-regular.woff', 'client');
+  api.addAssets('fonts/glyphicons-halflings-regular.eot', 'client');
+  api.addAssets('fonts/glyphicons-halflings-regular.svg', 'client');
+  api.addAssets('fonts/glyphicons-halflings-regular.ttf', 'client');
+  api.addAssets('fonts/glyphicons-halflings-regular.woff', 'client');
 
-  api.addFiles('img/bg.png', 'client');
-  api.addFiles('img/logo.png', 'client');
-  api.addFiles('img/logo-small.png', 'client');
-  api.addFiles('img/themes/dark.jpg', 'client');
-  api.addFiles('img/themes/default-head-light.jpg', 'client');
+  api.addAssets('img/bg.png', 'client');
+  api.addAssets('img/logo.png', 'client');
+  api.addAssets('img/logo-small.png', 'client');
+  api.addAssets('img/themes/dark.jpg', 'client');
+  api.addAssets('img/themes/default-head-light.jpg', 'client');
 
-  api.addFiles('img/icons/status-battery-0-icon.png', 'client');
-  api.addFiles('img/icons/status-battery-1-icon.png', 'client');
-  api.addFiles('img/icons/status-battery-2-icon.png', 'client');
-  api.addFiles('img/icons/status-battery-3-icon.png', 'client');
-  api.addFiles('img/icons/status-battery-4-icon.png', 'client');
-  api.addFiles('img/icons/status-signal-0-icon.png', 'client');
-  api.addFiles('img/icons/status-signal-1-icon.png', 'client');
-  api.addFiles('img/icons/status-signal-2-icon.png', 'client');
-  api.addFiles('img/icons/status-signal-3-icon.png', 'client');
-  api.addFiles('img/icons/status-signal-4-icon.png', 'client');
-  api.addFiles('img/ion/sprite-skin-flat.png', 'client');
+  api.addAssets('img/icons/status-battery-0-icon.png', 'client');
+  api.addAssets('img/icons/status-battery-1-icon.png', 'client');
+  api.addAssets('img/icons/status-battery-2-icon.png', 'client');
+  api.addAssets('img/icons/status-battery-3-icon.png', 'client');
+  api.addAssets('img/icons/status-battery-4-icon.png', 'client');
+  api.addAssets('img/icons/status-signal-0-icon.png', 'client');
+  api.addAssets('img/icons/status-signal-1-icon.png', 'client');
+  api.addAssets('img/icons/status-signal-2-icon.png', 'client');
+  api.addAssets('img/icons/status-signal-3-icon.png', 'client');
+  api.addAssets('img/icons/status-signal-4-icon.png', 'client');
+  api.addAssets('img/ion/sprite-skin-flat.png', 'client');
 
   //   api.export('JustGage', ['client']);
   //   api.export('blueimp', ['client']);

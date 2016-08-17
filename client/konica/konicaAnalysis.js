@@ -17,6 +17,8 @@ Template.konicaAnalysis.rendered = function () {
   var self = this;
   Measure(self);
 
+  console.log($("#slider"));
+
   $("#slider").ionRangeSlider({
     type: "double",
     grid: true,
