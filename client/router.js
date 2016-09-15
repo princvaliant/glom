@@ -43,5 +43,8 @@ Router.map(function () {
   this.route('/testimages', function () {
     routePublic(this, 'testVisualization');
   });
+  this.route('/assembly', function () {
+    routePublic(this, 'assembly');
+  });
 });
 
