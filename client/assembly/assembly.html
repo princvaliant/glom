@@ -1,26 +1,39 @@
 <template name="assembly">
     <!-- START CONTENT FRAME -->
-    <div style="margin-top:10px;height:100%">
+    <div class="container-fluid" style="margin-top:60px;">
         {{#if tasksLoading}}
-        <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591">
+            <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591" />
         {{/if}}
         <!-- START CONTENT FRAME BODY -->
-        <div class="content-frame-body content-frame-body-right" style="vertical-align:top;">
-            <table class="table">
-                <tr>
-                    <td style="width:100%;vertical-align:top;padding-left:15px;padding-top:24px;">
-                        <div id="chart1" style="height: 450px; width: 96%;"></div>
-                    </td>
-                </tr>
-            </table>
-            <table class="table">
-                <tr>
-                    <td style="width:100%;vertical-align:top;padding-left:15px;padding-top:24px;">
-                        <div id="chart2" style="height: 450px; width: 96%;"></div>
-                    </td>
-                </tr>
-            </table>
-        </div>
+        <!--<div class="container-fluid">-->
+        <!--<ul class="nav nav-pills nav-stacked col-md-2">-->
+        <!--<li class="active"><a href="#1a" data-toggle="tab">ITO mesa patterning</a></li>-->
+        <!--<li><a href="#1b" data-toggle="tab">Mesa etch PR strip</a></li>-->
+        <!--<li ><a href="#1c" data-toggle="tab">Messages</a></li>-->
+        <!--</ul>-->
+        <!--<div class="tab-content  col-md-10">-->
+        <!--<div class="tab-pane fade in active" id="1a" >-->
+        <!--<div id="chart1" style="height: 450px;"></div>-->
+        <!--</div>-->
+        <!--<div class="tab-pane fade " id="1b">-->
+        <!--<div id="chart2" style="height: 450px;"></div>-->
+        <!--</div>-->
+        <!--<div class="tab-pane fade" id="1c" >-->
+        <!--<div id="chart3" style="height: 450px;"></div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <div id="chart1" style="height: 450px;width:96%;"></div>
+        <div id="chart2" style="height: 450px;width:96%;"></div>
+        <div id="chart3" style="height: 450px;width:96%;"></div>
+        <div id="chart4" style="height: 450px;width:96%;"></div>
+        <div id="chart5" style="height: 450px;width:96%;"></div>
+        <div id="chart6" style="height: 450px;width:96%;"></div>
+        <div id="chart7" style="height: 450px;width:96%;"></div>
+        <div id="chart8" style="height: 450px;width:96%;"></div>
     </div>
     <!-- END CONTENT FRAME BODY -->
 </template>
+
+
