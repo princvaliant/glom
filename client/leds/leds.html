@@ -1,0 +1,38 @@
+<template name="leds">
+    <div class="content-frame" style="height:100%">
+        <!-- START CONTENT FRAME TOP -->
+        <div class="content-frame-left" style="height:100%">
+            <div class="form-group push-up-10">
+                <h4>LEDS distribution</h4>
+                <div class="input-group">
+                    <div class="input-group-addon"><span class="fa fa-search"></span>
+                    </div>
+                    <select class="form-control select device" placeholder="device">
+                        <option selected>T343</option>
+                    </select>
+                    <select class="form-control select color" placeholder="color">
+                        <option selected>R</option>
+                        <option selected>G</option>
+                        <option selected>B</option>
+                    </select>
+                    <select class="form-control select threshold" placeholder="threshold">
+                        <option selected>16</option>
+                    </select>
+                </div>
+            </div>
+            <div class="panel-body" style="height:100%;padding-top:1px;">
+                <a href="#" class="populate"><span class="fa fa-circle text-danger" style="margin-right:14px;"></span>Populate charts</a>
+            </div>
+        </div>
+        <!-- END CONTENT FRAME TOP -->
+        <!-- START CONTENT FRAME BODY -->
+        <div class="content-frame-body content-frame-body-right" style="vertical-align:top;padding-top:12px;">
+            {{#if tasksLoading}}
+                <img src="http://viewvc.svn.mozilla.org/vc/addons/trunk/bandwagon/skin/images/spinner.gif?revision=18591&view=co&pathrev=18591" />
+            {{/if}}
+            <div id="chart" style="height: 550px;width:96%;"></div>
+        </div>
+    </div>
+</template>
+
+

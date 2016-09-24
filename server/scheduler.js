@@ -16,10 +16,16 @@ scheduler = {
       }
     });
   },
-  executeMapReduce: function (collection, mapreduce) {
-
+  executeMapReduce: function (collection, map, reduce, options) {
     var ret = '';
-    var aggr = process.env.MONGO_URL.replace('db://', ' ') + ' --eval \'db.' + collection + '.mapReduce(' + mapreduce + ')\'';
+    var res = '';
+    var regex = /\/\/\s\d+|\/\//g;
+    var maps = (map + '').replace('map(', '(').replace(regex, '');
+    var reduces = (reduce + '').replace('reduce(', '(').replace(regex, '');
+    var conn = process.env.MONGO_URL.replace('db://', ' ');
+    conn = conn.split((/[\s,?@$:]+/));
+
+    var aggr = process.env.MONGO_URL.replace('db://', ' ') + ' --eval \'db.' + collection + '.mapReduce(' + maps + ', '  + reduces  + ', ' + options + ')\'';
     child = exec(aggr, function (error, stdout, stderr) {
       ret = 'stdout: ' + stdout + ' stderr: ' + stderr;
       if (error !== null) {

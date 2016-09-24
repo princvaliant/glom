@@ -46,5 +46,8 @@ Router.map(function () {
   this.route('/assembly', function () {
     routePublic(this, 'assembly');
   });
+  this.route('/leds', function () {
+    routePublic(this, 'leds');
+  });
 });
 

@@ -72,6 +72,34 @@ var chartDefs = [{
     // ymax: 8,
     // ymin: 5,
     yfields: ['metpat.base_pressure']
+}, {
+    id: 'chart9',
+    title: 'Metal liftoff',
+    ytitles: ['Total strip time'],
+    // ymax: 8,
+    // ymin: 5,
+    yfields: ['metlift.resist_total_strip_time_liftoff']
+}, {
+    id: 'chart10',
+    title: 'Isolation patterning',
+    ytitles: ['Resist thickness center', 'Resist thickness OD'],
+    // ymax: 8,
+    // ymin: 5,
+    yfields: ['isopat.resist_thickness_center', 'isopat.resist_thickness_OD']
+}, {
+    id: 'chart11',
+    title: 'Isolation PR Strip',
+    ytitles: ['Total strip time'],
+    // ymax: 8,
+    // ymin: 5,
+    yfields: ['isopr.total_strip_time']
+}, {
+    id: 'chart12',
+    title: 'Post isolation inspection',
+    ytitles: ['Defects 1', 'Defects 2', 'Defects 3', 'Defects 4', 'Defects 5', 'Defects 6'],
+    // ymax: 8,
+    // ymin: 5,
+    yfields: ['postinsp.pibpdefects001', 'postinsp.pibpdefects002', 'postinsp.pibpdefects003', 'postinsp.pibpdefects004', 'postinsp.pibpdefects005', 'postinsp.pibpdefects006']
 }];
 
 function assemblyProcessing (datalist) {
