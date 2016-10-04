@@ -43,8 +43,11 @@ Router.map(function () {
   this.route('/testimages', function () {
     routePublic(this, 'testVisualization');
   });
-  this.route('/assembly', function () {
-    routePublic(this, 'assembly');
+  this.route('/fabWafer', function () {
+    routePublic(this, 'fabWafer');
+  });
+  this.route('/fabExp', function () {
+    routePublic(this, 'fabExp');
   });
   this.route('/leds', function () {
     routePublic(this, 'leds');

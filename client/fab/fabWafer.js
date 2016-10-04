@@ -1,12 +1,12 @@
-Template.assembly.rendered = function () {
+Template.fabWafer.rendered = function () {
     Session.set('tasksLoading', true);
-    Meteor.call('getAssembly', function (error, datalist) {
+    Meteor.call('getFabPerWafer', function (error, datalist) {
         Session.set('tasksLoading', false);
         assemblyProcessing(datalist);
     });
 };
 
-Template.assembly.helpers({
+Template.fabWafer.helpers({
     tasksLoading: function () {
         return Session.get('tasksLoading');
     }
