@@ -1,10 +1,14 @@
 Meteor.methods({
     'getFabLedPerExperiment': function () {
 
+        var match = {
+            prod: '100'
+        };
+
         var group = {
             _id: '$expId',
             dt: {
-                $last: '$dateLed'
+                $last: '$date'
             }
         };
         var project = {
@@ -77,6 +81,8 @@ Meteor.methods({
         });
 
         return Assembly.aggregate([{
+            $match: match
+        }, {
             $group: group
         }, {
             $project: project
@@ -92,10 +98,14 @@ Meteor.methods({
     },
     'getFaJasperPerExperiment': function () {
 
+        var match = {
+            prod: '111'
+        };
+
         var group = {
             _id: '$expId',
             dt: {
-                $last: '$dateJasper'
+                $last: '$date'
             }
         };
         var project = {
@@ -118,6 +128,8 @@ Meteor.methods({
         });
 
         return Assembly.aggregate([{
+            $match: match
+        }, {
             $group: group
         }, {
             $project: project
