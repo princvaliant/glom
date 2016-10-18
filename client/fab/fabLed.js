@@ -4,6 +4,10 @@ Template.fabLed.rendered = function () {
         Session.set('tasksLoading', false);
         fabProcessing(datalist);
     });
+    Meteor.call('getFabLedPerExperimentWafer', function (error, datalist) {
+        Session.set('tasksLoading', false);
+        fabProcessingPerWafer(datalist);
+    });
 };
 
 Template.fabLed.helpers({
@@ -128,7 +132,7 @@ function fabProcessing (datalist) {
                     type: 'candlestick',
                     name: field,
                     color: ChartDefs.colors[i],
-                    risingColor:  ChartDefs.colors[i],
+                    risingColor: ChartDefs.colors[i],
                     showInLegend: true,
                     lineThickness: 1,
                     dataPoints: []
@@ -155,6 +159,81 @@ function fabProcessing (datalist) {
             }
             c.render();
         };
+    });
+    Session.set('tasksLoading', false);
+}
+
+
+function fabProcessingPerWafer (datalist) {
+    _.each(ChartDefs.fabLedPerWafer, function (chartDef) {
+        var chart = {
+            title: {
+                text: chartDef.title,
+                fontSize: 16
+            },
+            animationEnabled: false,
+            animationDuration: 700,
+            axisX: {
+                title: "Exp#",
+                titleFontSize: 14,
+                labelFontSize: 11,
+                labelAngle: -35,
+                interval: 1,
+                minimum: 0,
+                maximum: datalist.length
+
+            },
+            axisY: {
+                title: chartDef.ytitle,
+                titleFontSize: 14,
+                labelFontSize: 11,
+                //  minimum: range.min,
+                //  maximum: range.max,
+                gridThickness: 1
+            },
+            legend: {
+                verticalAlign: 'bottom',
+                horizontalAlign: "center",
+                fontSize: 12,
+                cursor: "pointer"
+            },
+            data: []
+        };
+
+        var counter = 0;
+        _.each(datalist, function (expObj) {
+            counter += 1;
+            var series = {
+                type: 'scatter',
+                markerSize: 4,
+                toolTipContent: "<span style='\"'color: {color};'\"'><strong>{name}</strong></span><br/><strong> Wafer</strong> {code} <br/><strong> Value</strong> {y}</span>",
+                name: expObj._id,
+                showInLegend: false,
+                dataPoints: []
+            };
+            _.each(expObj.data, function (dataObj) {
+                series.dataPoints.push({
+                    x: counter,
+                    y: dataObj[chartDef.yfields[0]] || '',
+                    code: dataObj.code,
+                    label: expObj._id
+                });
+
+            });
+            chart.data.push(series);
+        });
+
+        var c = new CanvasJS.Chart(chartDef.id, chart);
+        c.render();
+        chart.legend.itemclick = function (e) {
+            if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+            } else {
+                e.dataSeries.visible = true;
+            }
+            c.render();
+        };
+
     });
     Session.set('tasksLoading', false);
 }

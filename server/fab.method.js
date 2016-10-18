@@ -88,7 +88,87 @@ Meteor.methods({
             $project: project
         }, {
             $match: {
-                dt: {$ne: null}
+                dt: {
+                    $gt: moment('2016-08-01').toDate()
+                }
+            }
+        }, {
+            $sort: {
+                'dt': 1
+            }
+        }]);
+    },
+    'getFabLedPerExperimentWafer': function () {
+
+        var match = {
+            prod: '100'
+        };
+
+        var group = {
+            _id: {
+                expId: '$expId',
+                code: '$code'
+            },
+            dt: {
+                $last: '$date'
+            },
+            pbyield: {
+                $last: '$pbyield'
+            },
+            pibyield: {
+                $last: '$pibyield'
+            }
+        };
+        var project = {
+            _id: '$_id',
+            dt: '$dt'
+        };
+        _.each(ChartDefs.fabLedPerWafer, function (chart) {
+            if (chart.yname === 'post_bond_pad_inspection') {
+                group['pbdefects' + '_avg'] = {$avg: {$add: []}};
+                for (var i = 1; i <= 6; i++) {
+                    group['pbdefects' + '_avg'].$avg.$add.push('$' + chart.yname + '.pbpdefects00' + i);
+                }
+                project['pbdefects'] = '$' + 'pbdefects' + '_avg';
+                project['pbyield'] = '$' + 'pbyield';
+            } else if (chart.yname === 'post_isolation_bond_pad_inspection') {
+                group['pibdefects' + '_avg'] = {$avg: {$add: []}};
+                for (var i = 1; i <= 6; i++) {
+                    group['pibdefects' + '_avg'].$avg.$add.push('$' + chart.yname + '.pibpdefects00' + i);
+                }
+                project['pibdefects'] = '$' + 'pibdefects' + '_avg';
+                project['pibyield'] = '$' + 'pibyield';
+            }
+        });
+        var group2 = {
+            _id: '$_id.expId',
+            dt: {
+                $last: '$dt'
+            },
+            data: {
+                $push: {
+                    code: '$_id.code',
+                    pbdefects: '$pbdefects',
+                    pbyield: '$pbyield',
+                    pibdefects: '$pibdefects',
+                    pibyield: '$pibyield'
+                }
+            }
+        };
+
+        return Assembly.aggregate([{
+            $match: match
+        }, {
+            $group: group
+        }, {
+            $project: project
+        }, {
+            $group: group2
+        }, {
+            $match: {
+                dt: {
+                    $gt: moment('2016-08-01').toDate()
+                }
             }
         }, {
             $sort: {
