@@ -1,182 +1,147 @@
 Meteor.methods({
-    'getFabLedPerExperiment': function () {
 
-        var match = {
-            prod: '100'
+    getFab: function() {
+
+        var query = {
+            parentCode: null,
+            'value.tags': 'nwLED|direct_view_baseline',
+            'value.productCode': '100',
+            'value.actualStart': {
+                $gt: moment('2016-08-01').toDate()
+            },
+            'value.experimentId': {$nin: ['EXPD9999', 'EXPD000']}
         };
 
-        var group = {
-            _id: '$expId',
-            dt: {
-                $last: '$date'
-            }
+        var fields = {
+            __id: '$_id',
+            code: '$code',
+            expId: '$value.experimentId',
+            prod: '$value.productCode'
         };
-        var project = {
-            _id: '$_id',
-            dt: '$dt'
-        };
-        _.each(ChartDefs.fabLed, function (chart) {
-            if (chart.yname === 'post_bond_pad_inspection') {
-                group['pbdefects' + '_max'] = {$max: {$add: []}};
-                group['pbdefects' + '_min'] = {$min: {$add: []}};
-                group['pbdefects' + '_avg'] = {$avg: {$add: []}};
-                for (var i = 1; i <= 6; i++) {
-                    group['pbdefects' + '_max'].$max.$add.push('$' + chart.yname + '.pbpdefects00' + i);
-                    group['pbdefects' + '_min'].$min.$add.push('$' + chart.yname + '.pbpdefects00' + i);
-                    group['pbdefects' + '_avg'].$avg.$add.push('$' + chart.yname + '.pbpdefects00' + i);
-                }
-                group['pbyield' + '_max'] = {$max: '$pbyield'};
-                group['pbyield' + '_min'] = {$min: '$pbyield'};
-                group['pbyield' + '_avg'] = {$avg: '$pbyield'};
-                project['pbdefects'] = [
-                    '$' + 'pbdefects' + '_avg',
-                    '$' + 'pbdefects' + '_max',
-                    '$' + 'pbdefects' + '_min',
-                    '$' + 'pbdefects' + '_avg'
-                ]
-                project['pbyield'] = [
-                    '$' + 'pbyield' + '_avg',
-                    '$' + 'pbyield' + '_max',
-                    '$' + 'pbyield' + '_min',
-                    '$' + 'pbyield' + '_avg'
-                ]
-            } else if (chart.yname === 'post_isolation_bond_pad_inspection') {
-                group['pibdefects' + '_max'] = {$max: {$add: []}};
-                group['pibdefects' + '_min'] = {$min: {$add: []}};
-                group['pibdefects' + '_avg'] = {$avg: {$add: []}};
-                for (var i = 1; i <= 6; i++) {
-                    group['pibdefects' + '_max'].$max.$add.push('$' + chart.yname + '.pibpdefects00' + i);
-                    group['pibdefects' + '_min'].$min.$add.push('$' + chart.yname + '.pibpdefects00' + i);
-                    group['pibdefects' + '_avg'].$avg.$add.push('$' + chart.yname + '.pibpdefects00' + i);
-                }
-                group['pibyield' + '_max'] = {$max: '$pibyield'};
-                group['pibyield' + '_min'] = {$min: '$pibyield'};
-                group['pibyield' + '_avg'] = {$avg: '$pibyield'};
-                project['pibdefects'] = [
-                    '$' + 'pibdefects' + '_avg',
-                    '$' + 'pibdefects' + '_max',
-                    '$' + 'pibdefects' + '_min',
-                    '$' + 'pibdefects' + '_avg'
-                ]
-                project['pibyield'] = [
-                    '$' + 'pibyield' + '_avg',
-                    '$' + 'pibyield' + '_max',
-                    '$' + 'pibyield' + '_min',
-                    '$' + 'pibyield' + '_avg'
-                ]
-            } else {
-                _.each(chart.yfields, function (field) {
-                    group[field + '_max'] = {$max: '$' + chart.yname + '.' + field};
-                    group[field + '_min'] = {$min: '$' + chart.yname + '.' + field};
-                    group[field + '_avg'] = {$avg: '$' + chart.yname + '.' + field};
 
-                    project[field] = [
-                        '$' + field + '_avg',
-                        '$' + field + '_max',
-                        '$' + field + '_min',
-                        '$' + field + '_avg'
-                    ]
+        _.each(FabChartDefs.fabLed, function (chart) {
+            _.each(chart.yfields, function (field) {
+                var step = field.split('.')[0];
+                fields[field] = '$value.' + field;
+                fields[step + '.actualStart'] = '$value.' + step + '.actualStart';
+            });
+            _.each(chart.seriesFilter, function (filter) {
+                _.keys(filter).forEach(function (key) {
+                    fields[key] = '$value.' + key;
                 });
+            });
+        });
+
+        fields['post_bond_pad_inspection.pbpyield'] = {
+            $sum: [{
+                $cond: [{$eq: ['$value.post_bond_pad_inspection.pbpgrade001', 'pass']}, 1, 0]
+            }, {
+                $cond: [{$eq: ['$value.post_bond_pad_inspection.pbpgrade002', 'pass']}, 1, 0]
+            }, {
+                $cond: [{$eq: ['$value.post_bond_pad_inspection.pbpgrade003', 'pass']}, 1, 0]
+            }, {
+                $cond: [{$eq: ['$value.post_bond_pad_inspection.pbpgrade004', 'pass']}, 1, 0]
+            }, {
+                $cond: [{$eq: ['$value.post_bond_pad_inspection.pbpgrade005', 'pass']}, 1, 0]
+            }, {
+                $cond: [{$eq: ['$value.post_bond_pad_inspection.pbpgrade006', 'pass']}, 1, 0]
+            }]
+        };
+        fields['post_isolation_bond_pad_inspection.pibpyield'] =  {
+            $sum: [{
+                $cond: [{$eq: ['$value.post_isolation_bond_pad_inspection.pibpgrade001', 'pass']}, 1, 0]
+            }, {
+                $cond: [{$eq: ['$value.post_isolation_bond_pad_inspection.pibpgrade002', 'pass']}, 1, 0]
+            }, {
+                $cond: [{$eq: ['$value.post_isolation_bond_pad_inspection.pibpgrade003', 'pass']}, 1, 0]
+            }, {
+                $cond: [{$eq: ['$value.post_isolation_bond_pad_inspection.pibpgrade004', 'pass']}, 1, 0]
+            }, {
+                $cond: [{$eq: ['$value.post_isolation_bond_pad_inspection.pibpgrade005', 'pass']}, 1, 0]
+            }, {
+                $cond: [{$eq: ['$value.post_isolation_bond_pad_inspection.pibpgrade006', 'pass']}, 1, 0]
+            }]
+        };
+
+        return  DataReports.aggregate([{
+            $match: query
+        }, {
+            $project: fields
+        }]);
+    },
+
+    getFabLedAveragePerExperiment: function () {
+
+        var query = {
+            parentCode: null,
+            'value.tags': 'nwLED|direct_view_baseline',
+            'value.productCode': '100',
+            'value.actualStart': {
+                $gt: moment('2016-08-01').toDate()
+            },
+            'value.experimentId': {$nin: ['EXPD9999', 'EXPD000', '', null]}
+        };
+
+        var project = {
+            expId: '$value.experimentId',
+            dt: '$value.actualStart'
+        };
+
+        _.each(FabChartDefs.fabLedAvgPerExperiment, function (chart) {
+            if (chart.yname === 'post_bond_pad_inspection') {
+                project['pbdefects'] = {$avg: []};
+                project['pbyield'] = {$sum: []};
+                for (var i = 1; i <= 6; i++) {
+                    project['pbdefects'].$avg.push('$value.' + chart.yname + '.pbpdefects00' + i);
+                    project['pbyield'].$sum.push({
+                            $cond: [{$eq: ['$value.' + chart.yname + '.pbpgrade00' + i, 'pass']}, 1, 0]
+                    });
+                }
+            } else if (chart.yname === 'post_isolation_bond_pad_inspection') {
+                project['pibdefects'] = {$avg: []};
+                project['pibyield'] = {$sum: []};
+                for (var i = 1; i <= 6; i++) {
+                    project['pibdefects'].$avg.push('$value.' + chart.yname + '.pibpdefects00' + i);
+                    project['pibyield'].$sum.push({
+                        $cond: [{$eq: ['$value.' + chart.yname + '.pibpgrade00' + i, 'pass']}, 1, 0]
+                    });
+                }
             }
         });
 
-        return Assembly.aggregate([{
-            $match: match
-        }, {
-            $group: group
-        }, {
-            $project: project
-        }, {
-            $match: {
-                dt: {
-                    $gt: moment('2016-08-01').toDate()
-                }
-            }
-        }, {
-            $sort: {
-                'dt': 1
-            }
-        }]);
-    },
-    'getFabLedPerExperimentWafer': function () {
-
-        var match = {
-            prod: '100'
-        };
-
         var group = {
-            _id: {
-                expId: '$expId',
-                code: '$code'
-            },
-            dt: {
-                $last: '$date'
+            _id:  '$expId',
+            pbdefects: {
+                $avg: '$pbdefects'
             },
             pbyield: {
-                $last: '$pbyield'
+                $avg: '$pbyield'
+            },
+            pibdefects: {
+                $avg: '$pibdefects'
             },
             pibyield: {
-                $last: '$pibyield'
-            }
-        };
-        var project = {
-            _id: '$_id',
-            dt: '$dt'
-        };
-        _.each(ChartDefs.fabLedPerWafer, function (chart) {
-            if (chart.yname === 'post_bond_pad_inspection') {
-                group['pbdefects' + '_avg'] = {$avg: {$add: []}};
-                for (var i = 1; i <= 6; i++) {
-                    group['pbdefects' + '_avg'].$avg.$add.push('$' + chart.yname + '.pbpdefects00' + i);
-                }
-                project['pbdefects'] = '$' + 'pbdefects' + '_avg';
-                project['pbyield'] = '$' + 'pbyield';
-            } else if (chart.yname === 'post_isolation_bond_pad_inspection') {
-                group['pibdefects' + '_avg'] = {$avg: {$add: []}};
-                for (var i = 1; i <= 6; i++) {
-                    group['pibdefects' + '_avg'].$avg.$add.push('$' + chart.yname + '.pibpdefects00' + i);
-                }
-                project['pibdefects'] = '$' + 'pibdefects' + '_avg';
-                project['pibyield'] = '$' + 'pibyield';
-            }
-        });
-        var group2 = {
-            _id: '$_id.expId',
+                $avg: '$pibyield'
+            },
             dt: {
                 $last: '$dt'
-            },
-            data: {
-                $push: {
-                    code: '$_id.code',
-                    pbdefects: '$pbdefects',
-                    pbyield: '$pbyield',
-                    pibdefects: '$pibdefects',
-                    pibyield: '$pibyield'
-                }
             }
         };
 
-        return Assembly.aggregate([{
-            $match: match
-        }, {
-            $group: group
+        return  DataReports.aggregate([{
+            $match: query
         }, {
             $project: project
         }, {
-            $group: group2
-        }, {
-            $match: {
-                dt: {
-                    $gt: moment('2016-08-01').toDate()
-                }
-            }
+            $group: group
         }, {
             $sort: {
-                'dt': 1
+                dt: 1
             }
         }]);
     },
-    'getFaJasperPerExperiment': function () {
+
+    getFabJasperPerExperiment: function () {
 
         var match = {
             prod: '111'
@@ -192,7 +157,7 @@ Meteor.methods({
             _id: '$_id',
             dt: '$dt'
         };
-        _.each(ChartDefs.fabJasper, function (chart) {
+        _.each(FabChartDefs.fabJasper, function (chart) {
             _.each(chart.yfields, function (field) {
                 group[field + '_max'] = {$max: '$' + chart.yname + '.' + field};
                 group[field + '_min'] = {$min: '$' + chart.yname + '.' + field};
