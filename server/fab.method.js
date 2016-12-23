@@ -144,13 +144,15 @@ Meteor.methods({
     getFabJasperPerExperiment: function () {
 
         var match = {
-            prod: '111'
+            parentCode: null,
+            'value.tags': 'DVD|jasper_backplane',
+            'value.productCode': '111'
         };
 
         var group = {
-            _id: '$expId',
+            _id: '$value.experimentId',
             dt: {
-                $last: '$date'
+                $last: '$value.actualStart'
             }
         };
         var project = {
@@ -159,9 +161,9 @@ Meteor.methods({
         };
         _.each(FabChartDefs.fabJasper, function (chart) {
             _.each(chart.yfields, function (field) {
-                group[field + '_max'] = {$max: '$' + chart.yname + '.' + field};
-                group[field + '_min'] = {$min: '$' + chart.yname + '.' + field};
-                group[field + '_avg'] = {$avg: '$' + chart.yname + '.' + field};
+                group[field + '_max'] = {$max: '$value.' + chart.yname + '.' + field};
+                group[field + '_min'] = {$min: '$value.' + chart.yname + '.' + field};
+                group[field + '_avg'] = {$avg: '$value.' + chart.yname + '.' + field};
 
                 project[field] = [
                     '$' + field + '_avg',
@@ -172,7 +174,7 @@ Meteor.methods({
             });
         });
 
-        return Assembly.aggregate([{
+        return DataReports.aggregate([{
             $match: match
         }, {
             $group: group
