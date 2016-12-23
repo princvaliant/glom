@@ -1,6 +1,6 @@
 Template.fabJasper.rendered = function () {
     Session.set('tasksLoading', true);
-    Meteor.call('getFaJasperPerExperiment', function (error, datalist) {
+    Meteor.call('getFabJasperPerExperiment', function (error, datalist) {
         Session.set('tasksLoading', false);
         fabProcessing(datalist);
     });
@@ -88,7 +88,7 @@ $('.nav-pills a').click(function (e) {
 
 function fabProcessing (datalist) {
 
-    _.each(ChartDefs.fabJasper, function (chartDef) {
+    _.each(FabChartDefs.fabJasper, function (chartDef) {
         var chart = {
             title: {
                 text: chartDef.title,
@@ -126,8 +126,8 @@ function fabProcessing (datalist) {
                 var series = {
                     type: 'candlestick',
                     name: field,
-                    color: ChartDefs.colors[i],
-                    risingColor:  ChartDefs.colors[i],
+                    color: FabChartDefs.colors[i],
+                    risingColor:  FabChartDefs.colors[i],
                     showInLegend: true,
                     lineThickness: 1,
                     dataPoints: []
