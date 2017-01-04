@@ -191,8 +191,7 @@ function fabProcessingAveragePerExperiment (datalist) {
         _.each(datalist, function (expObj) {
             counter += 1;
             if (expObj[chartDef.yfields[0]]) {
-                console.log(chartDef.yfields[0] + ' ' + expObj[chartDef.yfields[0]]);
-                series.dataPoints.push({
+                 series.dataPoints.push({
                     x: counter,
                     y: expObj[chartDef.yfields[0]],
                     label: expObj._id
