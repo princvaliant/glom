@@ -49,9 +49,6 @@ function fabProcessing (datalist) {
                 fontSize: 12,
                 cursor: "pointer"
             },
-            toolTip: {
-                shared: true
-            },
             data: []
         };
 
