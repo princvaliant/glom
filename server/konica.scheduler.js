@@ -5,18 +5,18 @@
 
 Meteor.startup(function () {
 
-  SyncedCron.add({
-    name: 'Prepare collections for konica charts page',
-    schedule: function (parser) {
-      // parser is a later.parse object
-      return parser.text('every 1 hour');
-    },
-    job: function () {
-      return scheduler.executeAggregate('dataReport', getPipeline());
-    }
-  });
-
-  SyncedCron.start();
+  // SyncedCron.add({
+  //   name: 'Prepare collections for konica charts page',
+  //   schedule: function (parser) {
+  //     // parser is a later.parse object
+  //     return parser.text('every 1 hour');
+  //   },
+  //   job: function () {
+  //     return scheduler.executeAggregate('dataReport', getPipeline());
+  //   }
+  // });
+  //
+  // SyncedCron.start();
 });
 
 

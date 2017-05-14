@@ -4,10 +4,19 @@
  * @type {meteor.startup}
  */
 
+
+
+
 var threshold = 16;
 var dvid = 'T343';
 
 Meteor.startup(function () {
+
+
+
+
+
+
     SyncedCron.add({
         name: 'Calculate tresholds for leds',
         schedule: function (parser) {
