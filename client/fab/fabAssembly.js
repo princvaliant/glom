@@ -217,8 +217,8 @@ function processingAveragePerExperiment (datalist) {
                 title: chartDef.ytitle,
                 titleFontSize: 14,
                 labelFontSize: 11,
-                //  minimum: range.min,
-                //  maximum: range.max,
+                minimum: range.min,
+                maximum: range.max,
                 gridThickness: 1
             },
             legend: {
